@@ -1,0 +1,79 @@
+#!/usr/bin/python -O
+
+from bottle import Bottle, run, template
+from collections import namedtuple
+import socket
+import sqlite3
+import DBUtils
+
+RowType = namedtuple("RowType", ["date", "fund", "source"])
+app = Bottle()
+
+def f_fund(fund):
+    """ decrate the fund, if positive, use green; negative, use red
+    """
+    if fund < 0:
+        return "<font color=red>%.1f</font>" % fund
+    elif fund > 0:
+        return "<font color=green>%.1f</font>" % fund
+    else:
+        return "%.1f" % fund
+
+
+@app.route("/")
+def stock_fund():
+    conn = sqlite3.connect(DBUtils.DBFILE)
+
+    codes = DBUtils.get_codes(conn)
+
+    h_tables = []
+    cursor = conn.cursor()
+    for code in codes:
+
+        tablename = "T{0}".format(code)
+        querystr = """SELECT {0}
+        FROM {1}
+        WHERE source = 'dzh'
+        ORDER BY date DESC LIMIT 50""".format(",".join(RowType._fields),
+                                              tablename)
+        cursor.execute(querystr)
+
+        #table header
+        tlines = ["""<tr bgcolor="#a0a0a0">
+    <th>{0}</th><th>Date</th><th>Fund</th>
+</tr>""".format(code)]
+
+        total_funds = 0
+        for row in cursor.fetchall():
+            tlines.append("""<tr bgcolor="#eeeeee">
+    <td></td><td>{0}</td><td align="right">{1}</td>
+</tr>""".format(row[0], f_fund(row[1])))
+            total_funds += row[1]
+
+        #table footer
+        tlines.append("""<tr bgcolor="#eeeeee">
+    <td></td><td>Total</td><td align="right">{0}</td>
+</tr>""".format(f_fund(total_funds)))
+
+        h_tables.append("""<br/>
+<table border=0 bgcolor="#000000" cellspacing="0" cellpadding="5">
+<col width="80">
+<col width="100">
+<col width="80">
+{tbody}
+</table>
+<br/>""".format(tbody="\n".join(tlines)))
+
+
+    html = """<html>
+<title>Stock Funds</title>
+<body>
+{0}
+</body>
+</html>
+""".format("\n".join(h_tables))
+
+    return html
+
+
+run(app, host=socket.getfqdn(), port=8088, debug=True)
