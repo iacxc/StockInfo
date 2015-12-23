@@ -1,30 +1,27 @@
 #!/usr/bin/python -O
 
-import sys
-import DBUtils
+
 from datetime import date
+import DBUtils
+import StockUtil
 
-if len(sys.argv) < 2:
-    sys.exit(1)
-
-fname = sys.argv[1]
-_, datestr = fname.split('.')
+datestr = date.today().strftime('%Y-%m-%d')
 
 db = DBUtils.get_db()
 cursor = db.cursor()
 
-with file(fname) as f:
-    stock_data = [line.split() for line in f]
-    codelist = ['sh' + data[0] if data[0].startswith('6')
-                               else 'sz' + data[0]
-                    for data in stock_data]
-    stock_info = DBUtils.get_stockinfo(codelist)
-    for data in stock_data:
-        sqlstr = "insert into {0} values (?,?,?,?,?,?)".format("T" + data[0])
-        price = stock_info[data[0]]['curr']
-        cursor.execute(sqlstr, (datestr, data[1], data[2],
-                                data[3], data[4], price))
+codelist = [info[0] for info in DBUtils.get_codeinfo(db)]
+funds = StockUtil.get_funds(codelist)
+stock_data = StockUtil.get_brief_data(codelist)
+
+for code in codelist:
+    if code in funds:
+        fund = funds[code]
+        sqlstr = "insert into {0}({1}) values (?,?,?,?,?,?)".format(
+                      "T" + code,
+                      "date, fund_in, fund_out, fund_net, fund_per, price")
+        cursor.execute(sqlstr, (datestr, fund["big_in"], fund["big_out"],
+                                         fund["big_net"], fund["big_per"],
+                                         stock_data[code]['price']))
 
     db.commit()
-
-

@@ -1,0 +1,110 @@
+
+import requests
+import re
+from collections import namedtuple
+
+
+def get_history(code):
+    url = "http://table.finance.yahoo.com/table.csv?s=%s." % code + \
+          ("ss" if code.startswith("60") else "sz")
+
+    if __debug__: print url
+    resp = requests.get(url)
+    RecordType = namedtuple("RecordType", ["date", "open", "high", "low",
+                                           "close", "volume", "adj_close"])
+
+    datas = []
+    if resp.status_code == 200:
+        for line in resp.text.split("\n")[1:]:
+            if line.strip() == "": continue
+
+            datas.append(RecordType(*line.split(",")))
+
+    return reversed(datas)
+
+
+def get_funds(codelist):
+    prefix = lambda x: "ff_" + ("sh" if x.startswith("60") else "sz") + x
+    url = "http://qt.gtimg.cn/q=" + ",".join(map(prefix, codelist))
+
+    if __debug__: print url
+    resp = requests.get(url)
+
+    funds = {}
+    for code, line in zip(codelist, resp.text.split("\n")):
+        if len(line.strip()) == 0: continue
+        print code, line
+        m = re.search(r"(.+)=\"(.+)\"", line)
+        items = m.group(2).split("~")
+        fund = {"big_in"    : float(items[1]),
+                "big_out"   : float(items[2]),
+                "big_net"   : float(items[3]),
+                "big_per"   : float(items[4]),
+                "small_in"  : float(items[5]),
+                "small_out" : float(items[6]),
+                "small_net" : float(items[7]),
+                "small_per" : float(items[8])
+               }
+        funds[items[0][2:]] = fund
+
+    return funds
+
+
+def get_brief_data(codelist):
+    prefix = lambda x: "s_" + ("sh" if x.startswith("60") else "sz") + x
+    url = "http://qt.gtimg.cn/q=" + ",".join(map(prefix, codelist))
+
+    if __debug__: print url
+    resp = requests.get(url)
+
+    datas = {}
+    for code, line in zip(codelist, resp.text.split("\n")):
+        if len(line.strip()) == 0: continue
+
+        m = re.search(r"(.+)=\"(.+)\"", line)
+        items = m.group(2).split("~")
+        data = {"price"   : float(items[3]),
+                "delta"   : float(items[4]),
+                "percent" : float(items[5]),
+                "amount"  : float(items[6]),
+                "volume"  : float(items[7]),
+               }
+        datas[code] = data
+
+    return datas
+
+
+def get_data(codelist):
+    prefix = lambda x: ("sh" if x.startswith("60") else "sz") + x
+    url = "http://qt.gtimg.cn/q=" + ",".join(map(prefix, codelist))
+
+    if __debug__: print url
+    resp = requests.get(url)
+
+    datas = {}
+    for code, line in zip(codelist, resp.text.split("\n")):
+        if len(line.strip()) == 0: continue
+
+        m = re.search(r"(.+)=\"(.+)\"", line)
+        items = m.group(2).split("~")
+        data = { "price"   : float(items[3]),
+                 "last"    : float(items[4]),
+                 "open"    : float(items[5]),
+                 "buy"     : float(items[9]),
+                 "buy2"    : float(items[11]),
+                 "buy3"    : float(items[13]),
+                 "sell"    : float(items[19]),
+                 "sell2"   : float(items[21]),
+                 "sell3"   : float(items[23]),
+                 "delta"   : float(items[31]),
+                 "percent" : float(items[32]),
+                 "high"    : float(items[33]),
+                 "low"     : float(items[34]),
+                 "volume"  : float(items[36]),
+                 "amount"  : float(items[37]) }
+        datas[code] = data
+
+    return datas
+
+
+

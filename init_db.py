@@ -27,6 +27,7 @@ code_infos = [
 ("300033",   26200),
 ("300059",  129100),
 ("300104",  109200),
+("300149",   35600),
 ("300214",   29300),
 ("300273",   51300),
 ("600388",  106900),
@@ -44,8 +45,8 @@ for code in (info[0] for info in code_infos):
     date text not null primary key,
     fund_in real,
     fund_out real,
-    fund_in2 real,
-    fund_out2 real,
+    fund_net real,
+    fund_per real,
     price real default 1.0)""".format(tablename)
 
     if cleandb:
