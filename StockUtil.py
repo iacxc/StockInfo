@@ -33,7 +33,7 @@ def get_funds(codelist):
     funds = {}
     for code, line in zip(codelist, resp.text.split("\n")):
         if len(line.strip()) == 0: continue
-        print code, line
+
         m = re.search(r"(.+)=\"(.+)\"", line)
         items = m.group(2).split("~")
         fund = {"big_in"    : float(items[1]),
