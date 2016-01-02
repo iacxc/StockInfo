@@ -16,7 +16,13 @@ stock_data = StockUtil.get_brief_data(codelist)
 
 for code in codelist:
     if code in funds:
+        if __debug__:
+            print "Processing" , code, "..."
         fund = funds[code]
+
+        if fund["date"] != datestr:
+            continue
+
         sqlstr = "insert into {0}({1}) values (?,?,?,?,?,?)".format(
                       "T" + code,
                       "date, fund_in, fund_out, fund_net, fund_per, price")

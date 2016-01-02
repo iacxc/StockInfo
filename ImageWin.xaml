@@ -1,0 +1,71 @@
+﻿<Window x:Class="Stock_fund.ImageWin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ImageWin" Height="454" Width="402">
+    <Window.Triggers>
+        <EventTrigger SourceName="cmdStart" RoutedEvent="Button.Click">
+            <BeginStoryboard Name="fadeStoryboardBegin">
+                <Storyboard CurrentTimeInvalidated="Storyboard_CurrentTimeInvalidated">
+<!--                    <DoubleAnimation
+                        Storyboard.TargetName="imgTop" Storyboard.TargetProperty="Opacity"
+                        From="1" To="0" Duration="0:0:5"/>
+-->
+                    <DoubleAnimation Storyboard.TargetName="visibleStop"
+                                     Storyboard.TargetProperty="Offset"
+                                     From="0" To="1.2" Duration="0:0:12"/>
+                    <DoubleAnimation Storyboard.TargetName="transparentStop"
+                                     Storyboard.TargetProperty="Offset"
+                                     From="0" To="1" Duration="0:0:10"/>
+                </Storyboard>
+                
+            </BeginStoryboard>
+        </EventTrigger>
+        <EventTrigger SourceName="cmdPause" RoutedEvent="Button.Click">
+            <PauseStoryboard BeginStoryboardName="fadeStoryboardBegin"/>
+        </EventTrigger>
+        <EventTrigger SourceName="cmdResume" RoutedEvent="Button.Click">
+            <ResumeStoryboard BeginStoryboardName="fadeStoryboardBegin"/>
+        </EventTrigger>
+        <EventTrigger SourceName="cmdStop" RoutedEvent="Button.Click">
+            <StopStoryboard BeginStoryboardName="fadeStoryboardBegin"/>
+        </EventTrigger>
+        <EventTrigger SourceName="cmdMiddle" RoutedEvent="Button.Click">
+            <SeekStoryboard BeginStoryboardName="fadeStoryboardBegin" Offset="0:0:1"/>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Image Source="Images/image010.jpg"/>
+        <Image Source="Images/image012.jpg" Name="imgTop">
+            <Image.OpacityMask>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Offset="0" Color="Transparent" x:Name="transparentStop"/>
+                    <GradientStop Offset="0" Color="Black" x:Name="visibleStop"/>
+                </LinearGradientBrush>
+            </Image.OpacityMask>
+        </Image>
+
+        <StackPanel Grid.Row="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="3" >
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Height" Value="35"/>
+                        <Setter Property="Margin" Value="3"/>
+                        <Setter Property="Padding" Value="5"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Name="cmdStart" Content="Start"/>
+                <Button Name="cmdPause" Content="Pause"/>
+                <Button Name="cmdResume" Content="Resume"/>
+                <Button Name="cmdStop" Content="Stop"/>
+                <Button Name="cmdMiddle" Content="Move To Middle"/>
+            </StackPanel>
+            
+            <TextBlock Name="lblTime" Text="storyboard progress" Margin="3" HorizontalAlignment="Center"/>
+            <Button Content="Grow" Name="cmdGrow" Padding="5" Margin="3"/>
+        </StackPanel>
+    </Grid>
+</Window>

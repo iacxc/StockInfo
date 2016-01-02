@@ -7,10 +7,10 @@ namespace Stock_fund
 {
     class StockFund
     {
-        public string fundDate { get; set; }
-        public double? fundIn { get; set; }
-        public double? fundOut { get; set; }
-        public double? fundNet { get; set; }
-        public double? fundPer { get; set; }
+        public string FundDate { get; set; }
+        public double? FundIn { get; set; }
+        public double? FundOut { get; set; }
+        public double FundNet { get; set; }
+        public double FundPercent { get; set; }
     }
 }

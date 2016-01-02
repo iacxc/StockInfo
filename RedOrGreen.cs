@@ -8,7 +8,7 @@ using System.Globalization;
 namespace Stock_fund
 {
     [ValueConversion(typeof(string), typeof(string))]
-    class ColorConvert: IValueConverter
+    class RedOrGreen: IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

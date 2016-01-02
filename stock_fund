@@ -12,11 +12,11 @@ def f_fund(fund):
     """ decrate the fund, if positive, use green; negative, use red
     """
     if fund > 0:
-        return "<font color=red>%.1f</font>" % fund
+        return "<font color=green>{0:.2f}</font>".format(fund)
     elif fund < 0:
-        return "<font color=green>%.1f</font>" % fund
+        return "<font color=red>{0:.2f}</font>".format(fund)
     else:
-        return "%.1f" % fund
+        return "{0:.2f}".format(fund)
 
 
 @app.route("/")
@@ -71,7 +71,7 @@ ORDER BY date""".format(",".join(RowType._fields), tablename, limit)
     <td align="right">{fund_in:.1f}</td>
     <td align="right">{fund_out:.1f}</td>
     <td align="right">{fund_net}</td>
-    <td align="right"><b>{percent}</b>%</td>
+    <td align="right"><b>{percent}</b> %</td>
 </tr>""".format(rowheader="<td rowspan=%d>&nbsp;</td>" % (len(rows)+1)
                                                    if firstrow else "",
                 date=row.date,
@@ -91,7 +91,7 @@ ORDER BY date""".format(",".join(RowType._fields), tablename, limit)
     <td></td>
     <td></td>
     <td align="right">{0}</td>
-    <td align="right"><b>{1}</b>%</td>
+    <td align="right"><b>{1}</b> %</td>
 </tr>""".format(f_fund(total_funds),
                 f_fund(total_percent)))
 

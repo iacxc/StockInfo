@@ -43,7 +43,10 @@ def get_funds(codelist):
                 "small_in"  : float(items[5]),
                 "small_out" : float(items[6]),
                 "small_net" : float(items[7]),
-                "small_per" : float(items[8])
+                "small_per" : float(items[8]),
+                "date"      : "{0}-{1}-{2}".format(items[13][0:4], 
+                                                   items[13][4:6], 
+                                                   items[13][6:8]),
                }
         funds[items[0][2:]] = fund
 

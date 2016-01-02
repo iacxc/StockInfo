@@ -1,61 +1,7 @@
 ﻿<Window x:Class="Stock_fund.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:Stock_fund"
-        Title="MainWindow" Width="680" Height="400" FontFamily="DengXian" FontSize="18">
-    <Window.Resources>
-        <local:ColorConvert x:Key="ColorConvert"/>
-    </Window.Resources>
-    
-    <Grid Margin="3">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition MinWidth="420"/>
-        </Grid.ColumnDefinitions>
-        <Border Margin="3" BorderBrush="SteelBlue" BorderThickness="2" CornerRadius="5">
-            <DockPanel LastChildFill="True" >
-                <TextBlock Text="Code list:" DockPanel.Dock="Top"/>
-                <ListBox Name="lstCode" SelectionChanged="lstCode_SelectionChanged" />
-            </DockPanel>
-        </Border>
-        <Border Margin="3" BorderBrush="SteelBlue" BorderThickness="1" CornerRadius="5" Grid.Column="1">
-                <DataGrid Name="dataGrid" AutoGenerateColumns="False" IsReadOnly="True">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Width="120" Header="Date" Binding="{Binding fundDate}" />
-                        <DataGridTextColumn Width="80" Header="Fund In"  Binding="{Binding fundIn}" >
-                            <DataGridTextColumn.CellStyle>
-                                <Style>
-                                    <Setter Property="FrameworkElement.HorizontalAlignment" Value="Right"/>
-                                </Style>
-                            </DataGridTextColumn.CellStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="80" Header="Fund Out" Binding="{Binding fundOut}">
-                            <DataGridTextColumn.CellStyle>
-                                <Style>
-                                    <Setter Property="FrameworkElement.HorizontalAlignment" Value="Right"/>
-                                </Style>
-                            </DataGridTextColumn.CellStyle>
-                        </DataGridTextColumn>
-                        <DataGridTemplateColumn Width="100" Header="Fund Net">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding fundNet}" HorizontalAlignment="Right"
-                                               Foreground="{Binding Path=fundNet, Converter={StaticResource ColorConvert}}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="*" Header="Fund Percent">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding fundPer, StringFormat=\{0:0.00%\}}" 
-                                               Foreground="{Binding Path=fundPer, Converter={StaticResource ColorConvert}}"
-                                               HorizontalAlignment="Right"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            
-        </Border>
-    </Grid>
+        Title="MainWindow" Height="640" Width="940">
+    <Frame Source="MainPage.xaml"></Frame>
+
 </Window>
