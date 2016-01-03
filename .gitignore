@@ -1,6 +1,8 @@
 *.pyc
 *.pyo
 *.suo
+data.*
 .idea
+.vscode
 bin
 obj
