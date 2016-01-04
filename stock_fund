@@ -5,7 +5,7 @@ from collections import namedtuple
 import DBUtils
 
 RowType = namedtuple("RowType", ["code", "date", "fund_in", "fund_out",
-                                 "fund_net", "fund_per", "value"])
+                                 "fund_net", "percent"])
 app = Bottle()
 
 def f_fund(fund):
@@ -35,7 +35,8 @@ def stock_fund():
 
         querystr = """SELECT *
 FROM
-    (SELECT {0}
+    (SELECT code, date, fund_in, fund_out, fund_net, 
+	        fund_net / value as percent
      FROM funds
      WHERE code = ?
      ORDER BY date DESC LIMIT {1})
@@ -61,7 +62,6 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
         firstrow = True
         for row in rows:
             row = RowType(*row)
-            percent = row.fund_net * 100 / row.value
 
             tlines.append("""<tr bgcolor="#eeeeee">
     {rowheader}
@@ -76,10 +76,10 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
                 fund_in=row.fund_in,
                 fund_out=row.fund_out,
                 fund_net=f_fund(row.fund_net),
-                percent=f_fund(percent),
+                percent=f_fund(row.percent),
                 ))
             total_funds += row.fund_net
-            total_percent += percent
+            total_percent += row.percent
 
             firstrow = False
 

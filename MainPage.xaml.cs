@@ -43,7 +43,7 @@ namespace Stock_fund
 
         private List<StockCode> GetCodes()
         {
-            String qrystr = "select code, market_share, name from code";
+            String qrystr = "select code, name from code";
             db.Open();
             SQLiteCommand command = new SQLiteCommand(qrystr, db);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -54,7 +54,6 @@ namespace Stock_fund
                 codes.Add(new StockCode()
                 {
                     Code = (string)reader["code"],
-                    MarketShare = (Int64)reader["market_share"],
                     Name = (string)reader["name"]
                 });
             }
@@ -68,10 +67,11 @@ namespace Stock_fund
         {
             FundList funds = new FundList();
 
-            String tablename = "T" + stockCode.Code;
-            string qrystr = "SELECT date, fund_in, fund_out, fund_net, fund_net / (price * " + 
-                             stockCode.MarketShare + ") as percent" +
-                             " FROM " + tablename + " ORDER BY date DESC LIMIT 50";
+            String tablename = "funds";
+            string qrystr = "SELECT date, fund_in, fund_out, fund_net, fund_net / value as percent" +
+                             " FROM " + tablename + 
+                             " WHERE code = '" + stockCode.Code + "'" +
+                             " ORDER BY date DESC LIMIT 50";
 
             db.Open();
             SQLiteCommand command = new SQLiteCommand(qrystr, db);
