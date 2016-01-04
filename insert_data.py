@@ -10,7 +10,7 @@ datestr = date.today().strftime('%Y-%m-%d')
 db = DBUtils.get_db()
 cursor = db.cursor()
 
-codelist = list(DBUtils.get_codes())
+codelist = list(DBUtils.get_codes(db))
 funds = StockUtil.get_funds(codelist)
 stock_data = StockUtil.get_data(codelist)
 
