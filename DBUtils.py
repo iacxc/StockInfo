@@ -7,15 +7,15 @@ import sqlite3
 DBFILE = "stock_fund.db"
 
 
-def get_db():
-    return sqlite3.connect(DBFILE)
+def get_db(dbfile=DBFILE):
+    return sqlite3.connect(dbfile)
 
 
-def get_codeinfo(db):
+def get_codes(db):
     cursor = db.cursor()
     cursor.execute("SELECT code FROM code")
 
-    return cursor.fetchall()
+    return (row[0] for row in cursor.fetchall())
 
 
 

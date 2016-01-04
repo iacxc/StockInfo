@@ -29,11 +29,9 @@ def stock_fund():
     limit = request.query.limit or '50'
     db = DBUtils.get_db()
 
-    code_info = DBUtils.get_codeinfo(db)
-
     h_tables = []
     cursor = db.cursor()
-    for info in code_info:
+    for code in DBUtils.get_codes(db):
 
         querystr = """SELECT *
 FROM
@@ -43,7 +41,7 @@ FROM
      ORDER BY date DESC LIMIT {1})
 ORDER BY date""".format(",".join(RowType._fields), limit)
 
-        cursor.execute(querystr, (info[0],))
+        cursor.execute(querystr, (code,))
 
         #table header
         tlines = ["""<tr bgcolor="#a0a0a0">
@@ -53,7 +51,7 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
     <th>Fund Out</th>
     <th>Fund Net</th>
     <th>Percent</th>
-</tr>""".format(info[0])]
+</tr>""".format(code)]
 
         total_funds = 0
         total_percent = 0
@@ -63,7 +61,7 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
         firstrow = True
         for row in rows:
             row = RowType(*row)
-            percent = row.fund_net / row.value / 100
+            percent = row.fund_net * 100 / row.value
 
             tlines.append("""<tr bgcolor="#eeeeee">
     {rowheader}
