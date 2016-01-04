@@ -62,9 +62,6 @@
     <Compile Include="ImageWin.xaml.cs">
       <DependentUpon>ImageWin.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="RedOrGreen.cs" />
     <Compile Include="StockCode.cs" />
     <Compile Include="StockFund.cs" />
@@ -84,10 +81,6 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

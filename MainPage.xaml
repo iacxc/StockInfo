@@ -8,31 +8,42 @@
         <local:RedOrGreen x:Key="RedOrGreen"/>
         
         <DataTemplate DataType="{x:Type local:StockCode}">
-            <Border BorderThickness="1" BorderBrush="SteelBlue" CornerRadius="4" Padding="3"
-                    Background="{Binding Path=Background, 
-                                 RelativeSource={RelativeSource 
-                                                 Mode=FindAncestor,AncestorType={x:Type ListBoxItem}}}">
-                <Grid Margin="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="80" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Margin="0,0,3,0" FontWeight="Heavy" Text="{Binding Code}"/>
-                    <TextBlock Margin="3,0,0,0" Grid.Column="1" Text="{Binding Name}"/>
-                </Grid>
-
-            </Border>
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="0,2,5,0" Text="{Binding Code}"/>
+                <TextBlock Margin="3,2,5,0" Grid.Column="1" Text="{Binding Name}"/>
+            </Grid>
         </DataTemplate>
 
-        <Style x:Key="ListStyle" TargetType="{x:Type ListBox}">
+        <Style x:Key="CodeListStyle" TargetType="{x:Type ListBox}">
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
                     <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="Background" Value="LightSteelBlue"/>
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                    <GradientStop Color="White" Offset="0.0" />
+                                    <GradientStop Color="LightSkyBlue" Offset="0.5" />
+                                    <GradientStop Color="White" Offset="1" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
                         <Setter Property="Padding" Value="3"/>
                         <Style.Triggers>
                             <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                                <Setter Property="Background" Value="LightBlue"/>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                            <GradientStop Color="White" Offset="0.0" />
+                                            <GradientStop Color="SteelBlue" Offset="0.6" />
+                                            <GradientStop Color="White" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Foreground" Value="White"/>
@@ -45,7 +56,50 @@
             </Setter>
         </Style>
 
-
+        <Style x:Key="RoundButton" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="9,3,9,3" Name="_border">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                    <GradientStop Color="White" Offset="0.0" />
+                                    <GradientStop Color="Silver" Offset="0.5" />
+                                    <GradientStop Color="White" Offset="0.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" 
+                                              Margin="{TemplateBinding Padding}" 
+                                              HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="_border">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                            <GradientStop Color="Silver" Offset="0.0" />
+                                            <GradientStop Color="White" Offset="0.5" />
+                                            <GradientStop Color="Silver" Offset="0.0" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect BlurRadius="10" Color="Black" 
+                                                          Direction="0" Opacity="0.6" 
+                                                          RenderingBias="Performance" ShadowDepth="0" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
    
     
@@ -57,17 +111,16 @@
                 <ColumnDefinition MinWidth="450"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Border Margin="5,2,5,2" BorderBrush="SteelBlue" 
-                    BorderThickness="2" CornerRadius="10" 
-                    Grid.Row="1" Grid.RowSpan="2">
+            <Border Grid.Row="0" Grid.RowSpan="2" Margin="5,2,5,2" 
+                    BorderBrush="SlateBlue"  BorderThickness="2" 
+                    CornerRadius="0,0,0,10" >
                 <DockPanel LastChildFill="True" >
                     <TextBlock Text="Code list:" Margin="5" DockPanel.Dock="Top"/>
                     <ListBox Name="lstCode" AlternationCount="2" 
-                             Style="{StaticResource ListStyle}" 
+                             Style="{StaticResource CodeListStyle}" 
                              SnapsToDevicePixels="True"
                              SelectionChanged="lstCode_SelectionChanged"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -75,22 +128,22 @@
                     
                 </DockPanel>
             </Border>
-            <TextBox Text="Stock Fund" FontWeight="Bold" BorderThickness="0"
-                     Grid.ColumnSpan="3" Margin="10" Padding="5" Cursor="Hand"
-                     Background="LightBlue" />
-            <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"
+            
+            <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
                         Width="3" VerticalAlignment="Stretch" HorizontalAlignment="Center"
                         ShowsPreview="False"/>
-            <Border Margin="5,2,5,2" BorderBrush="SteelBlue" BorderThickness="2" CornerRadius="8" 
-                    Grid.Row="1" Grid.Column="2">
-                <DataGrid x:Name="gridFund" AutoGenerateColumns="False" IsReadOnly="True" RowHeight="32"
-                         CanUserReorderColumns="False">
+            <Border Grid.Row="0" Grid.Column="2" Margin="5,2,5,2" 
+                    BorderBrush="SlateBlue" BorderThickness="2" CornerRadius="0,10,0,0" >
+                <DataGrid x:Name="gridFund" AutoGenerateColumns="False" 
+                          IsReadOnly="True" RowHeight="32"
+                          CanUserReorderColumns="False" CanUserResizeRows="False" 
+                          SelectionChanged="gridFund_SelectionChanged">
                     <DataGrid.Resources>
-                        <Style x:Key="FundHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+                        <Style x:Key="FundHeaderStyle" 
+                               TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter Property="Margin" Value="1"/>
-                            <Setter Property="Padding" Value="15,0,0,0"/>
-                            <Setter Property="Background" Value="AliceBlue"/>
+                            <Setter Property="Padding" Value="10,0,0,0"/>
+                            <Setter Property="Background" Value="LightSteelBlue"/>
                             <Setter Property="Height" Value="40"/>
                             
                         </Style>
@@ -157,21 +210,26 @@
                 </DataGrid>
             </Border>
             
-            <StackPanel Grid.Row="2" Grid.Column="2">
-                <Button Content="Click to Grow" Name="cmdGrow" Height="40"
-                        HorizontalAlignment="Center" Width="160">
+            <StackPanel Grid.Row="1" Grid.Column="2">
+                <Button Name="cmdGrow" Height="40" Content="Click to Grow"
+                        HorizontalAlignment="Center" Width="160" 
+                        Style="{StaticResource RoundButton}" Click="cmdGrow_Click">
+                    <!--
                     <Button.Triggers>
                         <EventTrigger RoutedEvent="Button.Click">
                             <EventTrigger.Actions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="540" Duration="0:0:3"/>
-                                        <DoubleAnimation Storyboard.TargetProperty="Height" To="80" Duration="0:0:3"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="580" 
+                                                Duration="0:0:3" AutoReverse="True"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="Height" To="80" 
+                                                Duration="0:0:3" AutoReverse="True"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger.Actions>
                         </EventTrigger>
                     </Button.Triggers>
+                    -->
                 </Button>
             </StackPanel>
         </Grid>

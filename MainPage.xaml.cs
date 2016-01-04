@@ -119,7 +119,32 @@ namespace Stock_fund
             }
 
             gridFund.ItemsSource = (FundList)hashFunds[code.Code];
-           
+
+        }
+
+        private void gridFund_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataGrid grid = (DataGrid)sender;
+
+            StockFund fund = (StockFund)grid.SelectedItem;
+
+            if (fund != null) 
+                MessageBox.Show(fund.FundDate);
+        }
+
+        private void cmdGrow_Click(object sender, RoutedEventArgs e)
+        {
+            DoubleAnimation widthAni = new DoubleAnimation();
+            widthAni.To = gridFund.ActualWidth;
+            widthAni.Duration = TimeSpan.FromSeconds(3);
+            widthAni.AutoReverse = true;
+            cmdGrow.BeginAnimation(Button.WidthProperty, widthAni);
+
+            DoubleAnimation heightAni = new DoubleAnimation();
+            heightAni.To = 60;
+            heightAni.Duration = TimeSpan.FromSeconds(3);
+            heightAni.AutoReverse = true;
+            cmdGrow.BeginAnimation(Button.HeightProperty, heightAni);
         }
 
         
