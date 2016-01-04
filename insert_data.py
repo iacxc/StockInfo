@@ -12,7 +12,7 @@ cursor = db.cursor()
 
 codelist = [info[0] for info in DBUtils.get_codeinfo(db)]
 funds = StockUtil.get_funds(codelist)
-stock_data = StockUtil.get_brief_data(codelist)
+stock_data = StockUtil.get_data(codelist)
 
 for code in codelist:
     if code in funds:
@@ -23,11 +23,10 @@ for code in codelist:
         if fund["date"] != datestr:
             continue
 
-        sqlstr = "insert into {0}({1}) values (?,?,?,?,?,?)".format(
-                      "T" + code,
-                      "date, fund_in, fund_out, fund_net, fund_per, price")
-        cursor.execute(sqlstr, (datestr, fund["big_in"], fund["big_out"],
+        sqlstr = "insert into funds({0}) values (?,?,?,?,?,?,?)".format(
+                      "code, date, fund_in, fund_out, fund_net, fund_per, value")
+        cursor.execute(sqlstr, (code, datestr, fund["big_in"], fund["big_out"],
                                          fund["big_net"], fund["big_per"],
-                                         stock_data[code]['price']))
+                                         stock_data[code]['circu_value']))
 
     db.commit()

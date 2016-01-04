@@ -104,7 +104,9 @@ def get_data(codelist):
                  "high"    : float(items[33]),
                  "low"     : float(items[34]),
                  "volume"  : float(items[36]),
-                 "amount"  : float(items[37]) }
+                 "amount"  : float(items[37]),
+                 "circu_value" : float(items[44]),
+                 "value"   : float(items[45]) }
         datas[code] = data
 
     return datas

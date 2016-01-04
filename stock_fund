@@ -4,8 +4,8 @@ from bottle import Bottle, run, request
 from collections import namedtuple
 import DBUtils
 
-RowType = namedtuple("RowType", ["date", "fund_in", "fund_out",
-                                 "fund_net", "fund_per", "price"])
+RowType = namedtuple("RowType", ["code", "date", "fund_in", "fund_out",
+                                 "fund_net", "fund_per", "value"])
 app = Bottle()
 
 def f_fund(fund):
@@ -35,15 +35,15 @@ def stock_fund():
     cursor = db.cursor()
     for info in code_info:
 
-        tablename = "T{0}".format(info[0])
         querystr = """SELECT *
 FROM
     (SELECT {0}
-     FROM {1}
-     ORDER BY date DESC LIMIT {2})
-ORDER BY date""".format(",".join(RowType._fields), tablename, limit)
+     FROM funds
+     WHERE code = ?
+     ORDER BY date DESC LIMIT {1})
+ORDER BY date""".format(",".join(RowType._fields), limit)
 
-        cursor.execute(querystr)
+        cursor.execute(querystr, (info[0],))
 
         #table header
         tlines = ["""<tr bgcolor="#a0a0a0">
@@ -63,7 +63,7 @@ ORDER BY date""".format(",".join(RowType._fields), tablename, limit)
         firstrow = True
         for row in rows:
             row = RowType(*row)
-            percent = row.fund_net * 100 / (info[1] * row.price)
+            percent = row.fund_net / row.value / 100
 
             tlines.append("""<tr bgcolor="#eeeeee">
     {rowheader}

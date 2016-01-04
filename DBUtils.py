@@ -13,7 +13,7 @@ def get_db():
 
 def get_codeinfo(db):
     cursor = db.cursor()
-    cursor.execute("SELECT code, market_share FROM code")
+    cursor.execute("SELECT code FROM code")
 
     return cursor.fetchall()
 
