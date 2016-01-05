@@ -6,3 +6,5 @@ data.*
 .vscode
 bin
 obj
+Properties/Resources.Designer.cs
+Properties/Resources.zh-CN.Designer.cs
