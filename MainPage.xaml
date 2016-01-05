@@ -2,8 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Stock_fund"
-        Width="900" Height="604" FontFamily="DengXian" FontSize="18" 
-        WindowHeight="800" WindowWidth="1000" WindowTitle="Stock fund">
+        xmlns:prop="clr-namespace:Stock_fund.Properties"
+        Width="960" Height="600" FontFamily="DengXian" FontSize="18" 
+        WindowTitle="Stock fund">
     <Page.Resources>
         <local:RedOrGreen x:Key="RedOrGreen"/>
         
@@ -154,7 +155,7 @@
                         </Style>
                     </DataGrid.Resources>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="Date" Width="120" 
+                        <DataGridTemplateColumn Header="{x:Static prop:Resources.DateString}" Width="120"
                                                 HeaderStyle="{StaticResource FundHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -163,8 +164,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        
-                        <DataGridTemplateColumn Header="Fund In" Width="100"
+
+                        <DataGridTemplateColumn Header="{x:Static prop:Resources.FundIn}" Width="100"
                                                 HeaderStyle="{StaticResource FundHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -173,7 +174,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Fund Out" Width="100"
+                        <DataGridTemplateColumn Header="{x:Static prop:Resources.FundOut}" Width="100"
                                                 HeaderStyle="{StaticResource FundHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -183,7 +184,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn Header="Fund Net" Width="100"
+                        <DataGridTemplateColumn Header="{x:Static prop:Resources.FundNet}" Width="100"
                                                 HeaderStyle="{StaticResource FundHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -193,18 +194,31 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Fund Percent" Width="*" 
+                        <DataGridTemplateColumn Header="{x:Static prop:Resources.TotalPercent}" Width="Auto" 
                                                 HeaderStyle="{StaticResource FundHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding FundPercent, StringFormat={}{0:P}}" 
+                                    <TextBlock Text="{Binding TotalPercent, StringFormat={}{0:P}}" 
                                                Style="{StaticResource FundCellStyle}"
                                                FontWeight="Bold" Margin="3,3,25,3"
-                                               Foreground="{Binding Path=FundPercent, 
+                                               Foreground="{Binding Path=TotalPercent, 
                                                                     Converter={StaticResource RedOrGreen}}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="{x:Static prop:Resources.CurrentPercent}" Width="Auto" 
+                                                HeaderStyle="{StaticResource FundHeaderStyle}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding CurrentPercent, StringFormat={}{0:P}}" 
+                                               Style="{StaticResource FundCellStyle}"
+                                               FontWeight="Bold" Margin="3,3,25,3"
+                                               Foreground="{Binding Path=CurrentPercent, 
+                                                                    Converter={StaticResource RedOrGreen}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
 
                     </DataGrid.Columns>
                 </DataGrid>

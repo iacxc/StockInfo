@@ -15,7 +15,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.SQLite;
-
+using System.Globalization;
 
 namespace Stock_fund
 {
@@ -33,6 +33,7 @@ namespace Stock_fund
 
         public MainPage()
         {
+            Properties.Resources.Culture = new CultureInfo("zh-CN");
             InitializeComponent();
 
             db = new SQLiteConnection("Data Source=" + DBPATH);
@@ -68,7 +69,9 @@ namespace Stock_fund
             FundList funds = new FundList();
 
             String tablename = "funds";
-            string qrystr = "SELECT date, fund_in, fund_out, fund_net, fund_net / value as percent" +
+            string qrystr = "SELECT date, fund_in, fund_out, fund_net" +
+                                   ", fund_per / 100 as fund_per" + 
+                                   ", fund_net / value as percent" +
                              " FROM " + tablename + 
                              " WHERE code = '" + stockCode.Code + "'" +
                              " ORDER BY date DESC LIMIT 50";
@@ -86,7 +89,8 @@ namespace Stock_fund
                     FundIn = (double)reader["fund_in"],
                     FundOut = (double)reader["fund_out"],
                     FundNet = (double)reader["fund_net"],
-                    FundPercent = (double)reader["percent"]
+                    TotalPercent = (double)reader["percent"],
+                    CurrentPercent=(double)reader["fund_per"]
                 });
 
                 totalFunds += (double)reader["fund_net"];
@@ -98,9 +102,9 @@ namespace Stock_fund
             {
                 funds.Add(new StockFund() 
                 { 
-                    FundDate = "Total",  
+                    FundDate = Properties.Resources.Summary,
                     FundNet = totalFunds, 
-                    FundPercent = totalPer 
+                    TotalPercent = totalPer 
                 });
             }
 

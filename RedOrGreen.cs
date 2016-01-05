@@ -12,6 +12,9 @@ namespace Stock_fund
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+                return "Green";
+
             double dblValue = Double.Parse(value.ToString());
             if (dblValue < 0)
                 return "Red";

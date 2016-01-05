@@ -118,24 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CurrentPercent" xml:space="preserve">
-    <value>Current %</value>
+    <value>流入占比（当天）</value>
   </data>
   <data name="DateString" xml:space="preserve">
-    <value>Date</value>
+    <value>日期</value>
   </data>
   <data name="FundIn" xml:space="preserve">
-    <value>Fund In</value>
+    <value>流入</value>
   </data>
   <data name="FundNet" xml:space="preserve">
-    <value>Fund Net</value>
+    <value>净流入</value>
   </data>
   <data name="FundOut" xml:space="preserve">
-    <value>Fund Out</value>
+    <value>流出</value>
   </data>
   <data name="Summary" xml:space="preserve">
-    <value>Summary</value>
+    <value>合计</value>
   </data>
   <data name="TotalPercent" xml:space="preserve">
-    <value>Total %</value>
+    <value>流入占比（累计）</value>
   </data>
 </root>
