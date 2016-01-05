@@ -119,7 +119,7 @@
                     BorderBrush="SlateBlue"  BorderThickness="2" 
                     CornerRadius="0,0,0,10" >
                 <DockPanel LastChildFill="True" >
-                    <TextBlock Text="Code list:" Margin="5" DockPanel.Dock="Top"/>
+                    <TextBlock Text="{x:Static prop:Resources.CodeList}" Margin="5" DockPanel.Dock="Top"/>
                     <ListBox Name="lstCode" AlternationCount="2" 
                              Style="{StaticResource CodeListStyle}" 
                              SnapsToDevicePixels="True"
