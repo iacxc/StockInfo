@@ -121,7 +121,7 @@
     <value>股票代码</value>
   </data>
   <data name="CurrentPercent" xml:space="preserve">
-    <value>流入占比（当天）</value>
+    <value>换手比例</value>
   </data>
   <data name="DateString" xml:space="preserve">
     <value>日期</value>
@@ -139,6 +139,6 @@
     <value>合计</value>
   </data>
   <data name="TotalPercent" xml:space="preserve">
-    <value>流入占比（累计）</value>
+    <value>流通盘比例</value>
   </data>
 </root>
