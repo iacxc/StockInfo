@@ -117,11 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Amount" xml:space="preserve">
+    <value>成交额</value>
+  </data>
+  <data name="CircuValue" xml:space="preserve">
+    <value>流通市值</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>股票代码</value>
+  </data>
   <data name="CodeList" xml:space="preserve">
     <value>股票代码</value>
   </data>
   <data name="CurrentPercent" xml:space="preserve">
-    <value>换手比例</value>
+    <value>换手占比</value>
   </data>
   <data name="DateString" xml:space="preserve">
     <value>日期</value>
@@ -135,10 +144,31 @@
   <data name="FundOut" xml:space="preserve">
     <value>流出</value>
   </data>
+  <data name="High" xml:space="preserve">
+    <value>最高</value>
+  </data>
+  <data name="Last" xml:space="preserve">
+    <value>昨收</value>
+  </data>
+  <data name="Low" xml:space="preserve">
+    <value>最低</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>今开</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>收盘价</value>
+  </data>
   <data name="Summary" xml:space="preserve">
     <value>合计</value>
   </data>
   <data name="TotalPercent" xml:space="preserve">
-    <value>流通盘比例</value>
+    <value>流通盘占比</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>总市值</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>成交量</value>
   </data>
 </root>

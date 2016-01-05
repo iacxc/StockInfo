@@ -24,16 +24,18 @@ namespace Stock_fund
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainPage : Page
+    public partial class MainPage : Window
     {
         private const string DBPATH = "C:/caiche/Github/StockInfo/stock_fund.db";
         private SQLiteConnection db = null;
         private Hashtable hashFunds = new Hashtable();
         private List<StockCode> codeList;
 
+        Cursor cursorBack;
+
         public MainPage()
         {
-            Properties.Resources.Culture = new CultureInfo("zh-CN");
+            //Properties.Resources.Culture = new CultureInfo("zh-CN");
             InitializeComponent();
 
             db = new SQLiteConnection("Data Source=" + DBPATH);
@@ -129,7 +131,7 @@ namespace Stock_fund
         private void cmdGrow_Click(object sender, RoutedEventArgs e)
         {
             DoubleAnimation widthAni = new DoubleAnimation();
-            widthAni.To = gridFund.ActualWidth;
+            widthAni.To = gridFund.ActualWidth - cmdExit.ActualWidth;
             widthAni.Duration = TimeSpan.FromSeconds(3);
             widthAni.AutoReverse = true;
             cmdGrow.BeginAnimation(Button.WidthProperty, widthAni);
@@ -153,6 +155,23 @@ namespace Stock_fund
 
                 w.Show();
             }
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            cursorBack = this.Cursor;
+            this.Cursor = Cursors.Hand;
+            base.DragMove();
+        }
+
+        private void cmdExit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            this.Cursor = cursorBack;
         }
 
         
