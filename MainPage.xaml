@@ -123,7 +123,7 @@
                              Style="{StaticResource CodeListStyle}" 
                              SnapsToDevicePixels="True"
                              SelectionChanged="lstCode_SelectionChanged"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                             MouseDoubleClick="lstCode_MouseDoubleClick">
                     </ListBox>
                     
                 </DockPanel>
@@ -136,8 +136,7 @@
                     BorderBrush="SlateBlue" BorderThickness="2" CornerRadius="0,10,0,0" >
                 <DataGrid x:Name="gridFund" AutoGenerateColumns="False" 
                           IsReadOnly="True" RowHeight="32"
-                          CanUserReorderColumns="False" CanUserResizeRows="False" 
-                          SelectionChanged="gridFund_SelectionChanged">
+                          CanUserReorderColumns="False" CanUserResizeRows="False" >
                     <DataGrid.Resources>
                         <Style x:Key="FundHeaderStyle" 
                                TargetType="{x:Type DataGridColumnHeader}">

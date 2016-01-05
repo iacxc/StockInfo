@@ -122,16 +122,6 @@ namespace Stock_fund
 
         }
 
-        private void gridFund_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DataGrid grid = (DataGrid)sender;
-
-            StockFund fund = (StockFund)grid.SelectedItem;
-
-            if (fund != null) 
-                MessageBox.Show(fund.FundDate);
-        }
-
         private void cmdGrow_Click(object sender, RoutedEventArgs e)
         {
             DoubleAnimation widthAni = new DoubleAnimation();
@@ -145,6 +135,20 @@ namespace Stock_fund
             heightAni.Duration = TimeSpan.FromSeconds(3);
             heightAni.AutoReverse = true;
             cmdGrow.BeginAnimation(Button.HeightProperty, heightAni);
+        }
+
+        private void lstCode_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            StockCode code = (StockCode)lstCode.SelectedItem;
+            StockData data = StockData.GetData(code.Code);
+
+            if (data != null)
+            {
+                StockDetailWin w = new StockDetailWin();
+                w.SetDataSource(data);
+
+                w.Show();
+            }
         }
 
         

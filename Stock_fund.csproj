@@ -64,6 +64,10 @@
     </Compile>
     <Compile Include="RedOrGreen.cs" />
     <Compile Include="StockCode.cs" />
+    <Compile Include="StockData.cs" />
+    <Compile Include="StockDetailWin.xaml.cs">
+      <DependentUpon>StockDetailWin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StockFund.cs" />
     <Page Include="ImageWin.xaml">
       <SubType>Designer</SubType>
@@ -81,6 +85,10 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="StockDetailWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -110,7 +118,6 @@
   <ItemGroup>
     <Resource Include="Images\image010.JPG" />
     <Resource Include="Images\image012.JPG" />
-    <Content Include="SQLite.Interop.dll" />
     <Content Include="Libraries\System.Data.SQLite.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
