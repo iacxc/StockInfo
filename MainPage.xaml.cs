@@ -24,16 +24,18 @@ namespace Stock_fund
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainPage : Page
+    public partial class MainPage : Window
     {
         private const string DBPATH = "C:/caiche/Github/StockInfo/stock_fund.db";
         private SQLiteConnection db = null;
         private Hashtable hashFunds = new Hashtable();
         private List<StockCode> codeList;
 
+        Cursor m_Cursor;
+
         public MainPage()
         {
-            Properties.Resources.Culture = new CultureInfo("zh-CN");
+            //Properties.Resources.Culture = new CultureInfo("zh-CN");
             InitializeComponent();
 
             db = new SQLiteConnection("Data Source=" + DBPATH);
@@ -44,12 +46,12 @@ namespace Stock_fund
 
         private List<StockCode> GetCodes()
         {
-            String qrystr = "select code, name from code";
+            var qrystr = "select code, name from code";
             db.Open();
-            SQLiteCommand command = new SQLiteCommand(qrystr, db);
-            SQLiteDataReader reader = command.ExecuteReader();
+            var command = new SQLiteCommand(qrystr, db);
+            var reader = command.ExecuteReader();
 
-            List<StockCode> codes = new List<StockCode>();
+            var codes = new List<StockCode>();
             while (reader.Read())
             {
                 codes.Add(new StockCode()
@@ -66,10 +68,10 @@ namespace Stock_fund
 
         private FundList GetFundList(StockCode stockCode)
         {
-            FundList funds = new FundList();
+            var funds = new FundList();
 
-            String tablename = "funds";
-            string qrystr = "SELECT date, fund_in, fund_out, fund_net" +
+            var tablename = "funds";
+            var qrystr = "SELECT date, fund_in, fund_out, fund_net" +
                                    ", fund_per / 100 as fund_per" + 
                                    ", fund_net / value as percent" +
                              " FROM " + tablename + 
@@ -77,8 +79,8 @@ namespace Stock_fund
                              " ORDER BY date DESC LIMIT 50";
 
             db.Open();
-            SQLiteCommand command = new SQLiteCommand(qrystr, db);
-            SQLiteDataReader reader = command.ExecuteReader();
+            var command = new SQLiteCommand(qrystr, db);
+            var reader = command.ExecuteReader();
 
             double totalFunds = 0, totalPer = 0;
             while (reader.Read())
@@ -113,48 +115,66 @@ namespace Stock_fund
 
         private void lstCode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            StockCode code = (StockCode)lstCode.SelectedItem;
+            var code = lstCode.SelectedItem as StockCode;
 
             if (!hashFunds.Contains(code.Code))
             {
-                FundList fundList = GetFundList(code);
+                var fundList = GetFundList(code);
 
                 hashFunds.Add(code.Code, fundList);
             }
 
-            gridFund.ItemsSource = (FundList)hashFunds[code.Code];
+            gridFund.ItemsSource = hashFunds[code.Code] as FundList;
 
         }
 
         private void cmdGrow_Click(object sender, RoutedEventArgs e)
         {
-            DoubleAnimation widthAni = new DoubleAnimation();
-            widthAni.To = gridFund.ActualWidth;
-            widthAni.Duration = TimeSpan.FromSeconds(3);
+            var widthAni = new DoubleAnimation(
+                cmdGrow.ActualWidth,
+                gridFund.ActualWidth - cmdExit.ActualWidth - 10,
+                TimeSpan.FromSeconds(3));
             widthAni.AutoReverse = true;
-            cmdGrow.BeginAnimation(Button.WidthProperty, widthAni);
 
-            DoubleAnimation heightAni = new DoubleAnimation();
-            heightAni.To = 60;
-            heightAni.Duration = TimeSpan.FromSeconds(3);
-            heightAni.AutoReverse = true;
-            cmdGrow.BeginAnimation(Button.HeightProperty, heightAni);
+            cmdGrow.BeginAnimation(Button.WidthProperty, widthAni);
         }
 
         private void lstCode_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            StockCode code = (StockCode)lstCode.SelectedItem;
-            StockData data = StockData.GetData(code.Code);
+            var code = lstCode.SelectedItem as StockCode;
+            var data = StockData.GetData(code.Code);
 
             if (data != null)
             {
-                StockDetailWin w = new StockDetailWin();
+                var w = new StockDetailWin();
                 w.SetDataSource(data);
 
                 w.Show();
             }
         }
 
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            m_Cursor = this.Cursor;
+            this.Cursor = Cursors.Hand;
+            base.DragMove();
+        }
+
+        private void cmdExit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (m_Cursor != null)
+            {
+                this.Cursor = m_Cursor;
+                m_Cursor = null;
+            }
+        }
+
+      
         
     }
 }

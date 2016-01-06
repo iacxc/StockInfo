@@ -37,5 +37,7 @@ namespace Stock_fund
                 lblTime.Text = storyboardClock.CurrentTime.ToString();
             }
         }
+
+       
     }
 }

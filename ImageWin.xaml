@@ -6,10 +6,9 @@
         <EventTrigger SourceName="cmdStart" RoutedEvent="Button.Click">
             <BeginStoryboard Name="fadeStoryboardBegin">
                 <Storyboard CurrentTimeInvalidated="Storyboard_CurrentTimeInvalidated">
-<!--                    <DoubleAnimation
+                    <DoubleAnimation
                         Storyboard.TargetName="imgTop" Storyboard.TargetProperty="Opacity"
                         From="1" To="0" Duration="0:0:5"/>
--->
                     <DoubleAnimation Storyboard.TargetName="visibleStop"
                                      Storyboard.TargetProperty="Offset"
                                      From="0" To="1.2" Duration="0:0:12"/>
@@ -65,7 +64,7 @@
             </StackPanel>
             
             <TextBlock Name="lblTime" Text="storyboard progress" Margin="3" HorizontalAlignment="Center"/>
-            <Button Content="Grow" Name="cmdGrow" Padding="5" Margin="3"/>
+            <Button Content="Grow" Name="cmdGrow" Padding="5" Margin="3"  />
         </StackPanel>
     </Grid>
 </Window>

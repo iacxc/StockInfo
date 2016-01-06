@@ -42,14 +42,40 @@ namespace Stock_fund
 
         public void SetDataSource(StockData data)
         {
+            TreeViewItem item = new TreeViewItem()
+                           { Header = String.Format("{0} : {1}",
+                                 Properties.Resources.Code, data.Code) };
+            item.Items.Add(new TreeViewItem()
+                           { Header = String.Format("{0} : {1}",
+                                 Properties.Resources.Price, data.Price) });
+            item.Items.Add(new TreeViewItem()
+                           { Header = String.Format("{0} : {1}",
+                                 Properties.Resources.Last, data.Last) });
+            item.Items.Add(new TreeViewItem()
+                          { Header = String.Format("{0} : {1}", 
+                                Properties.Resources.Open, data.Open) });
+            item.Items.Add(new TreeViewItem() 
+                          { Header = String.Format("{0} : {1}", 
+                              Properties.Resources.High, data.High) });
+            item.Items.Add(new TreeViewItem() 
+                          { Header = String.Format("{0} : {1}", 
+                              Properties.Resources.Low, data.Low) });
+            item.Items.Add(new TreeViewItem() 
+                          { Header = String.Format("{0} : {1}", 
+                              Properties.Resources.Volume, data.Volume) });
+            item.Items.Add(new TreeViewItem() 
+                          { Header = String.Format("{0} : {1}", 
+                              Properties.Resources.Amount, data.Amount) });
+            item.Items.Add(new TreeViewItem() 
+                          { Header = String.Format("{0} : {1}", 
+                              Properties.Resources.CircuValue, data.CircuValue) });
+            item.Items.Add(new TreeViewItem() 
+                          { Header = String.Format("{0} : {1}", 
+                              Properties.Resources.Value, data.Value) });
 
-            Node rootNode = new Node {Name="Code", Value=data.Code};
-            rootNode.Nodes.Add(new Node {Name="Price", Value=data.Price.ToString()});
-            rootNode.Nodes.Add(new Node {Name="Open", Value=data.Open.ToString()});
-            rootNode.Nodes.Add(new Node {Name="Last", Value=data.Last.ToString()});
+            tvStockDetail.Items.Clear();
+            tvStockDetail.Items.Add(item);
 
-            List<Node> nodes = new List<Node>(){rootNode};
-            tvStockDetail.ItemsSource = nodes;
         }
 
     }

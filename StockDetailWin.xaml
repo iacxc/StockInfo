@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Stock_fund.StockDetailWin"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="StockDetails" Height="427" Width="474">
+        Title="StockDetails" Height="427" Width="474" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow">
     <Grid>
         <TreeView Margin="3" Name="tvStockDetail">
 
