@@ -1,0 +1,57 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Stock_fund">
+
+    <local:RedOrGreen x:Key="RedOrGreen"/>
+    
+    <DataTemplate x:Key="CodeListItem">
+        <Grid Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="80" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="0,2,5,0" Text="{Binding Code}"/>
+            <TextBlock Margin="3,2,5,0" Grid.Column="1" Text="{Binding Name}"/>
+        </Grid>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="FundCellDate">
+        <TextBlock Text="{Binding FundDate}" 
+                   Style="{StaticResource FundCellStyle}"
+                   HorizontalAlignment="Center"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FundCellFundIn">
+        <TextBlock Text="{Binding FundIn, StringFormat={}{0:F2}}"  
+                   Style="{StaticResource FundCellStyle}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FundCellFundOut">
+        <TextBlock Text="{Binding FundOut, StringFormat={}{0:F2}}" 
+                   Style="{StaticResource FundCellStyle}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FundCellFundNet">
+        <TextBlock Text="{Binding FundNet,StringFormat={}{0:F2}}" 
+                   Style="{StaticResource FundCellStyle}"
+                   Foreground="{Binding Path=FundNet, 
+                               Converter={StaticResource RedOrGreen}}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FundCellTotalPer">
+        <TextBlock Text="{Binding TotalPercent, StringFormat={}{0:P3}}" 
+                   Style="{StaticResource FundCellStyle}"
+                   FontWeight="Bold" Margin="3,3,25,3"
+                   Foreground="{Binding Path=TotalPercent, 
+                                Converter={StaticResource RedOrGreen}}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FundCellCurrentPer">
+        <TextBlock Text="{Binding CurrentPercent, StringFormat={}{0:P}}" 
+                   Style="{StaticResource FundCellStyle}"
+                   FontWeight="Bold" Margin="3,3,25,3"
+                   Foreground="{Binding Path=CurrentPercent, 
+                                Converter={StaticResource RedOrGreen}}"/>
+    </DataTemplate>
+</ResourceDictionary>
