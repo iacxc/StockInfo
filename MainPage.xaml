@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Stock_fund"
         xmlns:prop="clr-namespace:Stock_fund.Properties"
-        Width="900" Height="600" FontFamily="DengXian" FontSize="18" 
-        Title="Stock fund" WindowStyle="None" 
+        Width="960" Height="600" FontFamily="DengXian" FontSize="18" 
+        WindowStyle="None" 
         WindowStartupLocation="CenterOwner" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         MouseLeftButtonUp="Window_MouseLeftButtonUp">
@@ -73,19 +73,18 @@
                         <DataGridTemplateColumn Header="{x:Static prop:Resources.CurrentPercent}" Width="*" 
                                                 HeaderStyle="{StaticResource FundHeaderStyle}"
                                                 CellTemplate="{StaticResource FundCellCurrentPer}"/>
-
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
             
+
             <StackPanel Grid.Row="2" Grid.Column="2" Margin="5,2,5,0" Orientation="Horizontal">
-                
                 <Button Name="cmdGrow" Content="Click to Grow"
                         Padding="20,10,20,10"
                         Style="{StaticResource RoundButton}" Click="cmdGrow_Click">
                 </Button>
-                <Button Content="Exit" Name="cmdExit"
-                        Padding="10" Margin="10,0,0,0"
+                <Button Content="Exit" Name="cmdExit" 
+                        Margin="10,0,0,0" Padding="10"
                         Style="{StaticResource RoundButton}" Click="cmdExit_Click"/>
             </StackPanel>
         </Grid>

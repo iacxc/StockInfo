@@ -134,6 +134,7 @@ namespace Stock_fund
                 cmdGrow.ActualWidth,
                 gridFund.ActualWidth - cmdExit.ActualWidth - 10,
                 TimeSpan.FromSeconds(3));
+
             widthAni.AutoReverse = true;
 
             cmdGrow.BeginAnimation(Button.WidthProperty, widthAni);
@@ -155,6 +156,7 @@ namespace Stock_fund
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+
             m_Cursor = this.Cursor;
             this.Cursor = Cursors.Hand;
             base.DragMove();
@@ -173,8 +175,6 @@ namespace Stock_fund
                 m_Cursor = null;
             }
         }
-
-      
         
     }
 }
