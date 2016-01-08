@@ -7,7 +7,8 @@ namespace Stock_fund
 {
     class StockFund
     {
-        public string FundDate { get; set; }
+        public string Code { get; set; }
+        public string Date { get; set; }
         public double? FundIn { get; set; }
         public double? FundOut { get; set; }
         public double FundNet { get; set; }

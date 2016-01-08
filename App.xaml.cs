@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 
+
 namespace Stock_fund
 {
     /// <summary>
@@ -12,5 +13,12 @@ namespace Stock_fund
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            var mainWindow = new MainWindow();
+            mainWindow.Show();
+
+        }
+
     }
 }

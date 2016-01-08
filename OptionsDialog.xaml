@@ -1,0 +1,34 @@
+﻿<Window x:Class="Stock_fund.OptionsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Options" Height="300" Width="355" 
+        WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner" 
+        ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+
+    <Grid>
+        <TabControl  HorizontalAlignment="Left" Name="tabControl1" VerticalAlignment="Top" >
+            <TabItem Header="Limitation">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Limitation days:" Margin="5"/>
+                    <TextBox Grid.Column="1" Width="150" Margin="5"
+                             Name="txtDays" Text="{Binding LimitDays}"/>
+                    <StackPanel Grid.Row="1" Grid.ColumnSpan="2" 
+                                Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="OK" Margin="5" Padding="5" 
+                                Click="OnOk" />
+                        <Button Content="Cancel" Margin="5" Padding="5"
+                                Click="OnCancel"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

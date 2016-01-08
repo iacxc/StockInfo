@@ -8,15 +8,15 @@ RowType = namedtuple("RowType", ["code", "date", "fund_in", "fund_out",
                                  "fund_net", "fund_per", "percent"])
 app = Bottle()
 
-def f_fund(fund):
+def f_fund(fund, digits=2):
     """ decrate the fund, if positive, use green; negative, use red
     """
     if fund > 0:
-        return "<font color=green>{0:.2f}</font>".format(fund)
+        return "<font color=green>{0:.{1}f}</font>".format(fund, digits)
     elif fund < 0:
-        return "<font color=red>{0:.2f}</font>".format(fund)
+        return "<font color=red>{0:.{1}f}</font>".format(fund, digits)
     else:
-        return "{0:.2f}".format(fund)
+        return "{0:.{1}f}".format(fund, digits)
 
 
 @app.route("/")
@@ -78,7 +78,7 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
                 fund_in=row.fund_in,
                 fund_out=row.fund_out,
                 fund_net=f_fund(row.fund_net),
-                percent=f_fund(row.percent),
+                percent=f_fund(row.percent, 3),
                 fund_per=f_fund(row.fund_per),
                 ))
             total_funds += row.fund_net
@@ -95,7 +95,7 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
     <td align="right"><b>{1}</b> %</td>
     <td></td>
 </tr>""".format(f_fund(total_funds),
-                f_fund(total_percent)))
+                f_fund(total_percent, 3)))
 
         h_tables.append("""<br/>
 <table border=0 bgcolor="#404040" cellspacing="1" cellpadding="5">
