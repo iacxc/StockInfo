@@ -4,7 +4,46 @@
                     xmlns:prop="clr-namespace:Stock_fund.Properties">
 
     <local:RedOrGreen x:Key="RedOrGreen"/>
-    
+
+    <!-- Buttons with round corner -->
+    <ControlTemplate x:Key="RoundCornerButton" TargetType="Button">
+        <Border BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            CornerRadius="15,3,15,3" Name="_border">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="White" Offset="0.0" />
+                    <GradientStop Color="Silver" Offset="0.5" />
+                    <GradientStop Color="White" Offset="0.0" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" TargetName="_border">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="Silver" Offset="0.0" />
+                            <GradientStop Color="White" Offset="0.5" />
+                            <GradientStop Color="Silver" Offset="0.0" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="10" Color="Black" 
+                                                    Direction="0" Opacity="0.6" 
+                                                    RenderingBias="Performance" ShadowDepth="1" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
     <DataTemplate x:Key="CodeListItem">
         <Grid Margin="5">
             <Grid.ColumnDefinitions>
@@ -15,34 +54,33 @@
             <TextBlock Margin="3,2,5,0" Grid.Column="1" Text="{Binding Name}"/>
         </Grid>
     </DataTemplate>
-
-
+    
     <DataTemplate x:Key="FundCellDate">
         <TextBlock Text="{Binding Date}" 
-                   Style="{StaticResource FundCellStyle}"
+                   Style="{StaticResource GridCellStyle}"
                    HorizontalAlignment="Center"/>
     </DataTemplate>
 
     <DataTemplate x:Key="FundCellFundIn">
-        <TextBlock Text="{Binding FundIn, StringFormat={}{0:F2}}"  
-                   Style="{StaticResource FundCellStyle}"/>
+        <TextBlock Text="{Binding FundIn, StringFormat={}{0:F2}}"
+                   Style="{StaticResource GridCellStyle}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="FundCellFundOut">
-        <TextBlock Text="{Binding FundOut, StringFormat={}{0:F2}}" 
-                   Style="{StaticResource FundCellStyle}"/>
+        <TextBlock Text="{Binding FundOut, StringFormat={}{0:F2}}"
+                   Style="{StaticResource GridCellStyle}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="FundCellFundNet">
         <TextBlock Text="{Binding FundNet,StringFormat={}{0:F2}}" 
-                   Style="{StaticResource FundCellStyle}"
+                   Style="{StaticResource GridCellStyle}"
                    Foreground="{Binding FundNet, 
-                               Converter={StaticResource RedOrGreen}}"/>
+                                Converter={StaticResource RedOrGreen}}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="FundCellTotalPer">
         <TextBlock Text="{Binding TotalPercent, StringFormat={}{0:P3}}" 
-                   Style="{StaticResource FundCellStyle}"
+                   Style="{StaticResource GridCellStyle}"
                    FontWeight="Bold" Margin="3,3,25,3"
                    Foreground="{Binding TotalPercent, 
                                 Converter={StaticResource RedOrGreen}}"/>
@@ -50,71 +88,10 @@
 
     <DataTemplate x:Key="FundCellCurrentPer">
         <TextBlock Text="{Binding CurrentPercent, StringFormat={}{0:P}}" 
-                   Style="{StaticResource FundCellStyle}"
+                   Style="{StaticResource GridCellStyle}"
                    FontWeight="Bold" Margin="3,3,25,3"
                    Foreground="{Binding CurrentPercent, 
                                 Converter={StaticResource RedOrGreen}}"/>
-    </DataTemplate>
-
-    <DataTemplate x:Key="StockDetail">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock Text="{x:Static prop:Resources.Code}" FontWeight="Bold"/>
-            <TextBlock Grid.Column="1" Text="{Binding Code}"
-                               Padding="20,0,10,0"/>
-            <TextBlock Grid.Row="1" Text="{x:Static prop:Resources.Price}" 
-                       FontWeight="Bold"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Price}"
-                               Padding="20,0,10,0"/>
-            <TextBlock Grid.Row="2" Text="{x:Static prop:Resources.Last}"
-                       FontWeight="Bold"/>
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Last}"
-                               Padding="20,0,10,0"/>
-            <TextBlock Grid.Row="3" Text="{x:Static prop:Resources.Open}" 
-                       FontWeight="Bold"/>
-            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Open}"
-                               Padding="20,0,10,0"/>
-            <TextBlock Grid.Row="4" Text="{x:Static prop:Resources.High}"
-                       FontWeight="Bold"/>
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding High}"
-                               Padding="20,0,10,0"/>
-            <TextBlock Grid.Row="5" Text="{x:Static prop:Resources.Low}" 
-                       FontWeight="Bold"/>
-            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Low}"
-                               Padding="20,0,10,0"/>
-            <TextBlock Grid.Row="6" Text="{x:Static prop:Resources.Volume}" 
-                       FontWeight="Bold"/>
-            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Volume}"
-                               Padding="20,0,10,0"/>
-            <TextBlock Grid.Row="7" Text="{x:Static prop:Resources.Amount}" 
-                       FontWeight="Bold"/>
-            <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Amount}"
-                               Padding="20,0,10,0"/>
-            <TextBlock Grid.Row="8" Text="{x:Static prop:Resources.CircuValue}" 
-                       FontWeight="Bold"/>
-            <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding CircuValue}"
-                               Padding="20,0,10,0"/>
-            <TextBlock Grid.Row="9" Text="{x:Static prop:Resources.Value}" 
-                       FontWeight="Bold"/>
-            <TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding Value}"
-                               Padding="20,0,10,0"/>
-
-        </Grid>
     </DataTemplate>
 
 </ResourceDictionary>

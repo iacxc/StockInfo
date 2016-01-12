@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 
 namespace Stock_fund
@@ -17,17 +18,42 @@ namespace Stock_fund
     /// <summary>
     /// Interaction logic for Options.xaml
     /// </summary>
-    public partial class OptionsDialog : Window
+    public partial class OptionsDialog : Window, INotifyPropertyChanged
     {
-       
-        public int LimitDays { get; set;}
+
+        private int m_LimitDays;
+        public int LimitDays {
+            get { return m_LimitDays; }
+
+            set
+            {
+                if (m_LimitDays != value)
+                {
+                    m_LimitDays = value;
+                    OnPropertyChanged("LimitDays");
+                }
+            }
+        }
 
         public OptionsDialog()
         {
-            LimitDays = 50;
             DataContext = this;
-
             InitializeComponent();
+        }
+
+        public OptionsDialog(int days)
+            :this()
+        {
+            LimitDays = days;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propName)
+        {
+            var pc = PropertyChanged;
+            if (pc != null)
+                pc(this, new PropertyChangedEventArgs(propName));
         }
 
         private void OnOk(object sender, RoutedEventArgs e)

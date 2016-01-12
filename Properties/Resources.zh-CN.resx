@@ -147,6 +147,12 @@
   <data name="High" xml:space="preserve">
     <value>最高</value>
   </data>
+  <data name="Inc" xml:space="preserve">
+    <value>涨跌</value>
+  </data>
+  <data name="Inc_p" xml:space="preserve">
+    <value>涨幅</value>
+  </data>
   <data name="Last" xml:space="preserve">
     <value>昨收</value>
   </data>
@@ -157,7 +163,7 @@
     <value>今开</value>
   </data>
   <data name="Price" xml:space="preserve">
-    <value>收盘价</value>
+    <value>股价</value>
   </data>
   <data name="StockFund" xml:space="preserve">
     <value>股票资金</value>

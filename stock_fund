@@ -105,7 +105,7 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
 <col width="80">
 <col width="80">
 <col width="70">
-<col width="70">
+<col width="80">
 {tbody}
 </table>
 <br/>""".format(tbody="\n".join(tlines)))

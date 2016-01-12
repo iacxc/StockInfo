@@ -27,7 +27,7 @@ namespace Stock_fund
     public partial class MainWindow : Window
     {
         private const string DBPATH = "C:/caiche/Github/StockInfo/stock_fund.db";
-        private SQLiteConnection db = null;
+        private SQLiteConnection m_DB = null;
         private List<StockFund> m_StockFunds;
 
         Cursor m_Cursor;
@@ -37,8 +37,7 @@ namespace Stock_fund
         {
             InitializeComponent();
 
-            db = new SQLiteConnection("Data Source=" + DBPATH);
-            db.Open();
+            m_DB = new SQLiteConnection("Data Source=" + DBPATH);
 
             var codeList = GetCodes();
             var view = CollectionViewSource.GetDefaultView(codeList);
@@ -51,7 +50,8 @@ namespace Stock_fund
         private List<StockCode> GetCodes()
         {
             var qrystr = "select code, name from code";
-            var command = new SQLiteCommand(qrystr, db);
+            m_DB.Open();
+            var command = new SQLiteCommand(qrystr, m_DB);
             var reader = command.ExecuteReader();
 
             var codes = new List<StockCode>();
@@ -64,7 +64,7 @@ namespace Stock_fund
                 });
             }
 
-            db.Close();
+            m_DB.Close();
 
             return codes;
         }
@@ -82,9 +82,9 @@ where date in
      where code=a.code 
      order by date desc) 
 order by code, date", tablename);
-                
-            db.Open();
-            var command = new SQLiteCommand(qrystr, db);
+
+            m_DB.Open();
+            var command = new SQLiteCommand(qrystr, m_DB);
             var reader = command.ExecuteReader();
             
             while (reader.Read())
@@ -100,7 +100,7 @@ order by code, date", tablename);
                     CurrentPercent = (double)reader["fund_per"]
                 });
             }
-            db.Close();
+            m_DB.Close();
 
             return funds;
         }
@@ -147,21 +147,18 @@ order by code, date", tablename);
 
         private void lstCode_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var code = lstCode.SelectedItem as StockCode;
-            var data = StockData.GetData(code.Code);
+            var codeList = from code in GetCodes()
+                           select code.Code;
 
-            if (data != null)
-            {
-                var w = new StockDetailWin();
-                w.SetDataSource(data);
+            var w = new StockDetailWin();
+            w.SetCodeList(codeList);
 
-                w.Show();
-            }
+            w.Show();
+
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
             m_Cursor = Cursor;
             Cursor = Cursors.Hand;
             DragMove();
@@ -183,7 +180,7 @@ order by code, date", tablename);
 
         private void OnOptions(object sender, ExecutedRoutedEventArgs e)
         {
-            var dlg = new OptionsDialog();
+            var dlg = new OptionsDialog(m_LimitDays);
 
             if (dlg.ShowDialog() == true)
             {

@@ -11,6 +11,7 @@ namespace Stock_fund
     public class StockData
     {
         public string Code { get; set; }
+        public string Name { get; set; }
         public double Price { get; set; }
         public double Last { get; set; }
         public double Open { get; set; }
@@ -21,15 +22,23 @@ namespace Stock_fund
         public double CircuValue { get; set; }
         public double Value { get; set; }
 
-        public static StockData GetData(string code)
+        public double Inc
         {
-            string URL = "http://qt.gtimg.cn/q=";
-            if (code.StartsWith("60"))
-                URL += "sh";
-            else
-                URL += "sz";
+            get { return Price - Last; }
+        }
 
-            URL += code;
+        public double Inc_p
+        {
+            get { return (Price - Last) / Last; }
+        }
+
+        public static List<StockData> GetDatas(IEnumerable<string> codeList)
+        {
+            var codes = new List<string>();
+            foreach (var code in codeList)
+                codes.Add((code.StartsWith("60") ? "sh" : "sz") + code);
+
+            string URL = "http://qt.gtimg.cn/q=" + String.Join(",", codes);
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
             WebResponse resp = request.GetResponse();
@@ -39,30 +48,34 @@ namespace Stock_fund
             string response = reader.ReadToEnd();
             Regex rx = new Regex("(.+)=\"(.+)\"");
 
-            string line = response.Split(new Char[]{'\n'})[0];
-
-            Match m = rx.Match(line);
-            if (m.Success)
+            var datas = new List<StockData>();
+            foreach (var line in response.Split(new Char[]{'\n'}))
             {
-                string[] items = m.Groups[2].ToString().Split(new char[]{'~'});
-                return new StockData()
+                if (line.Count() == 0)
+                    break;
+
+                Match m = rx.Match(line);
+                if (m.Success)
                 {
-                    Code=code,
-                    Price=Double.Parse(items[3]),
-                    Last=Double.Parse(items[4]),
-                    Open=Double.Parse(items[5]),
-                    High=Double.Parse(items[33]),
-                    Low=Double.Parse(items[34]),
-                    Amount = Double.Parse(items[36]),
-                    Volume=Double.Parse(items[37]),
-                    CircuValue=Double.Parse(items[44]),
-                    Value=Double.Parse(items[45]),
-                };
+                    string[] items = m.Groups[2].ToString().Split(new char[]{'~'});
+                    datas.Add(new StockData()
+                    {
+                        Code=items[2],
+                        Name=items[1],
+                        Price=Double.Parse(items[3]),
+                        Last=Double.Parse(items[4]),
+                        Open=Double.Parse(items[5]),
+                        High=Double.Parse(items[33]),
+                        Low=Double.Parse(items[34]),
+                        Amount = Double.Parse(items[36]),
+                        Volume=Double.Parse(items[37]),
+                        CircuValue=Double.Parse(items[44]),
+                        Value=Double.Parse(items[45]),
+                    });
+                }
             }
+            return datas;
 
-            return null;
         }
-
-       
     }
 }
