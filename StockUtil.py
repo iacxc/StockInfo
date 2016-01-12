@@ -4,9 +4,16 @@ import re
 from collections import namedtuple
 
 
-def get_history(code):
-    url = "http://table.finance.yahoo.com/table.csv?s=%s." % code + \
-          ("ss" if code.startswith("60") else "sz")
+def get_history(code, fromdate=None, todate=None):
+    url = "http://table.finance.yahoo.com/table.csv?s={0}.{1}".format(
+                 code, "ss" if code.startswith("60") else "sz")
+
+    if fromdate is not None:
+        url += "&a={0}&b={1}&c={2}".format(fromdate.month-1,
+                                           fromdate.day, fromdate.year)
+    if todate is not None:
+        url += "&d={0}&e={1}&f={2}".format(todate.month-1,
+                                           todate.day, todate.year)
 
     if __debug__: print url
     resp = requests.get(url)
@@ -44,8 +51,8 @@ def get_funds(codelist):
                 "small_out" : float(items[6]),
                 "small_net" : float(items[7]),
                 "small_per" : float(items[8]),
-                "date"      : "{0}-{1}-{2}".format(items[13][0:4], 
-                                                   items[13][4:6], 
+                "date"      : "{0}-{1}-{2}".format(items[13][0:4],
+                                                   items[13][4:6],
                                                    items[13][6:8]),
                }
         funds[items[0][2:]] = fund
@@ -110,6 +117,3 @@ def get_data(codelist):
         datas[code] = data
 
     return datas
-
-
-

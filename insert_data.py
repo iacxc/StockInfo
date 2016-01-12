@@ -23,10 +23,11 @@ for code in codelist:
         if fund["date"] != datestr:
             continue
 
-        sqlstr = "insert into funds({0}) values (?,?,?,?,?,?,?)".format(
-                      "code, date, fund_in, fund_out, fund_net, fund_per, value")
+        sqlstr = "insert into funds({0}) values (?,?,?,?,?,?,?,?)".format(
+                      "code, date, fund_in, fund_out, fund_net, fund_per, value, price")
         cursor.execute(sqlstr, (code, datestr, fund["big_in"], fund["big_out"],
                                          fund["big_net"], fund["big_per"],
-                                         stock_data[code]['circu_value']))
+                                         stock_data[code]['circu_value'],
+                                         stock_data[code]['price']))
 
     db.commit()

@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:Stock_fund"
         xmlns:prop="clr-namespace:Stock_fund.Properties"
         Title="Stock Fund"
-        Width="1003" Height="672" FontFamily="DengXian" FontSize="18" 
+        Width="1066" Height="672" FontFamily="DengXian" FontSize="18" 
         WindowStyle="None" Background="Transparent" 
         WindowStartupLocation="CenterOwner" AllowsTransparency="True">
     
@@ -63,8 +63,10 @@
                     <ListBox Name="lstCode" AlternationCount="2" 
                              ItemsSource="{Binding}"
                              ItemTemplate="{StaticResource CodeListItem}"
+                             ItemContainerStyle="{StaticResource CodeListItemStyle}"
                              SelectionChanged="lstCode_SelectionChanged"
                              MouseDoubleClick="lstCode_MouseDoubleClick">
+
                         <ListBox.GroupStyle>
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
@@ -102,8 +104,10 @@
                                                 CellTemplate="{StaticResource FundCellFundNet}"/>
                         <DataGridTemplateColumn Width="120" Header="{x:Static prop:Resources.TotalPercent}"
                                                 CellTemplate="{StaticResource FundCellTotalPer}"/>
-                        <DataGridTemplateColumn Width="*" Header="{x:Static prop:Resources.CurrentPercent}" 
+                        <DataGridTemplateColumn Width="120" Header="{x:Static prop:Resources.CurrentPercent}" 
                                                 CellTemplate="{StaticResource FundCellCurrentPer}"/>
+                        <DataGridTemplateColumn Width="*" Header="{x:Static prop:Resources.Inc_p}" 
+                                                CellTemplate="{StaticResource FundCellIncPercent}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>

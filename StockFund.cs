@@ -14,5 +14,6 @@ namespace Stock_fund
         public double FundNet { get; set; }
         public double TotalPercent { get; set; }
         public double? CurrentPercent { get; set; }
+        public double? Inc_p { get; set; }
     }
 }

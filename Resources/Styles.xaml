@@ -86,25 +86,19 @@
         </Setter>
     </Style>
 
-    <Style TargetType="ListBox">
-        <Setter Property="ItemContainerStyle">
-            <Setter.Value>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Background" Value="{StaticResource brush1}"/>
-                    <Setter Property="Padding" Value="3"/>
-                    <Style.Triggers>
-                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="{StaticResource brush2}"/>
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="ListBoxItem.Background" Value="DarkRed"/>
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="BorderThickness" Value="1"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="CodeListItemStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Background" Value="{StaticResource brush1}"/>
+        <Style.Triggers>
+
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="{StaticResource brush2}"/>
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="Background" Value="DarkRed"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 
@@ -122,7 +116,7 @@
     <!-- Data Grid Column Cell-->
     <Style x:Key="GridCellStyle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="18"/>
-        <Setter Property="Margin" Value="3"/>
+        <Setter Property="Padding" Value="8"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>

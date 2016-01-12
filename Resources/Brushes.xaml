@@ -12,4 +12,12 @@
         <GradientStop Color="SteelBlue" Offset="0.6" />
         <GradientStop Color="White" Offset="1" />
     </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="brush3" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="White" Offset="0.0" />
+        <GradientStop Color="DarkRed" Offset="0.5" />
+        <GradientStop Color="White" Offset="1" />
+    </LinearGradientBrush>
+
+
 </ResourceDictionary>

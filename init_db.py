@@ -49,6 +49,7 @@ sqlstr = """CREATE TABLE IF NOT EXISTS funds (
     fund_net real,
     fund_per real,
     value real default 1.0,
+    price real,
     primary key (code, date))"""
 
 if cleandb:

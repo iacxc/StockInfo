@@ -76,6 +76,7 @@ namespace Stock_fund
             var qrystr = String.Format(
 @"select code, date, fund_in, fund_out, fund_net
        , fund_per / 100 as fund_per, fund_net / value as percent
+       , inc_p / 100 as inc_p
 from {0} a 
 where date in 
     (select date from {0}
@@ -97,7 +98,8 @@ order by code, date", tablename);
                     FundOut = (double)reader["fund_out"],
                     FundNet = (double)reader["fund_net"],
                     TotalPercent = (double)reader["percent"],
-                    CurrentPercent = (double)reader["fund_per"]
+                    CurrentPercent = (double)reader["fund_per"],
+                    Inc_p = (double)reader["inc_p"]
                 });
             }
             m_DB.Close();
