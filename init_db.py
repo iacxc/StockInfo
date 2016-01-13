@@ -32,6 +32,7 @@ code_infos = [
 ("300149",  u"量子高科"),
 ("300214",  u"日科化学"),
 ("300273",  u"和佳股份"),
+("300251",  u"光线传媒"),
 ("600388",  u"龙净环保"),
 ("600572",  u"康 恩 贝"),
 ("600830",  u"香溢融通"),
@@ -49,7 +50,7 @@ sqlstr = """CREATE TABLE IF NOT EXISTS funds (
     fund_net real,
     fund_per real,
     value real default 1.0,
-    price real,
+    inc_p real,
     primary key (code, date))"""
 
 if cleandb:
