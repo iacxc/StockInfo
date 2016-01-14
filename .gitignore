@@ -7,5 +7,5 @@ data.*
 *.db
 bin
 obj
-Properties/Resources.Designer.cs
-Properties/Resources.zh-CN.Designer.cs
+Resources.Designer.cs
+Resources.zh-CN.Designer.cs
