@@ -1,7 +1,6 @@
 *.pyc
 *.pyo
 *.suo
-data.*
 .idea
 .vscode
 *.db
@@ -9,3 +8,4 @@ bin
 obj
 Resources.Designer.cs
 Resources.zh-CN.Designer.cs
+node_modules

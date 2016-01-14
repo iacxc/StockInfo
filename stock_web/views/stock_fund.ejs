@@ -1,0 +1,38 @@
+
+<% for (var code in funds) { %>
+<br/>
+<table border=0 bgcolor="#404040" cellspacing="1" cellpadding="5">
+    <col width="70">
+    <col width="100">
+    <col width="70">
+    <col width="80">
+    <col width="80">
+    <col width="70">
+    <col width="80">
+    <col width="90">
+    <tr bgcolor="#a0a0a0">
+        <th><%= code %></th>
+        <th>Date</th>
+        <th>Fund In</th>
+        <th>Fund Out</th>
+        <th>Fund Net</th>
+        <th>Total %</th>
+        <th>Current %</th>
+        <th>Increase %</th>
+    </tr>
+<%     fundList = funds[code]
+       fundList.forEach(function(fund) { %>
+    <tr bgcolor="#eeeeee">
+        <td></td>
+        <td><%= fund.date %></td>
+        <td><%= fund.fund_in %></td>
+        <td><%= fund.fund_out %></td>
+        <td><%= fund.fund_net %></td>
+        <td><%= fund.fund_per %></td>
+        <td><%= fund.percent %></td>
+        <td><%= fund.inc_p %></td>
+    </tr>
+<%     })%>
+</table>
+<br/>
+<%} %>
