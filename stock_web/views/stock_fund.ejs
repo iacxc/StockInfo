@@ -1,58 +1,9 @@
 
 <% var keys = [];
-   for (var code in funds) {
-       keys.push(code);
-   }
+   for (var code in funds) { keys.push(code); }
    keys.sort();
-   keys.forEach( function(code) { %>
-<br/>
-<table border=0 bgcolor="#404040" cellspacing="1" cellpadding="5">
-    <col width="70">
-    <col width="100">
-    <col width="70">
-    <col width="80">
-    <col width="80">
-    <col width="90">
-    <col width="80">
-    <col width="90">
-    <tr bgcolor="#a0a0a0">
-        <th><%= code %></th>
-        <th>Date</th>
-        <th>Fund In</th>
-        <th>Fund Out</th>
-        <th>Fund Net</th>
-        <th>Total %</th>
-        <th>Current %</th>
-        <th>Increase %</th>
-    </tr>
-<%     fundList = funds[code]
-       var total_funds = 0
-       var total_percent = 0
-       fundList.forEach(function(fund) { %>
-    <tr bgcolor="#eeeeee">
-        <td></td>
-        <td><%= fund.date %></td>
-        <td align="right"><%= fund.fund_in %></td>
-        <td align="right"><%= fund.fund_out %></td>
-        <td align="right"><%- f_fund(fund.fund_net) %></td>
-        <td align="right"><%- f_fund(fund.fund_per, 3) %> %</td>
-        <td align="right"><%- f_fund(fund.percent) %> %</td>
-        <td align="right"><%- f_fund(fund.inc_p) %> %</td>
-    </tr>
-<%         total_funds += fund.fund_net;
-           total_percent += fund.percent;
-       })%>
-    <tr bgcolor="#eeeeee">
-        <td></td>
-        <td>Total</td>
-        <td></td>
-        <td></td>
-        <td align="right"><%- f_fund(total_funds) %></td>
-        <td align="right"><%- f_fund(total_percent, 3) %> %</td>
-        <td></td>
-        <td></td>
-    </tr>
-
-</table>
-<br/>
-<%}); %>
+   keys.forEach( function(code) {
+       fundList = funds[code];
+%>
+<% include fund_table %>
+<% }); %>
