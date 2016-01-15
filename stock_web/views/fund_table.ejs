@@ -1,6 +1,6 @@
 
-<br/>
-<table border=0 bgcolor="#404040" cellspacing="1" cellpadding="5">
+<p/>
+<table border=0 cellspacing="0">
     <col width="70">
     <col width="90">
     <col width="90">
@@ -32,11 +32,11 @@
         <td align="right"><%- f_fund(fund.percent, 3) %> %</td>
         <td align="right"><%- f_fund(fund.fund_per) %> %</td>
         <td align="right"><%- f_fund(fund.inc_p) %> %</td>
-    </tr>
+    </tr bgcolor="#c0c0c0">
 <%         total_funds += fund.fund_net;
            total_percent += fund.percent;
        })%>
-    <tr bgcolor="#eeeeee">
+    <tr bgcolor="#c0c0c0">
         <td></td>
         <td>Total</td>
         <td></td>
@@ -48,4 +48,3 @@
     </tr>
 
 </table>
-<br/>
