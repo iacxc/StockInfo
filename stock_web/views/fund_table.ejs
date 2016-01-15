@@ -2,12 +2,12 @@
 <br/>
 <table border=0 bgcolor="#404040" cellspacing="1" cellpadding="5">
     <col width="70">
-    <col width="100">
-    <col width="70">
-    <col width="80">
-    <col width="80">
     <col width="90">
-    <col width="80">
+    <col width="90">
+    <col width="90">
+    <col width="100">
+    <col width="90">
+    <col width="90">
     <col width="90">
     <tr bgcolor="#a0a0a0">
         <th><%= code %></th>
@@ -28,9 +28,9 @@
         <td><%= fund.date %></td>
         <td align="right"><%= fund.fund_in %></td>
         <td align="right"><%= fund.fund_out %></td>
-        <td align="right"><%- f_fund(fund.fund_net) %></td>
-        <td align="right"><%- f_fund(fund.fund_per, 3) %> %</td>
-        <td align="right"><%- f_fund(fund.percent) %> %</td>
+        <td align="right"><%- f_fund(fund.fund_net, 1) %></td>
+        <td align="right"><%- f_fund(fund.percent, 3) %> %</td>
+        <td align="right"><%- f_fund(fund.fund_per) %> %</td>
         <td align="right"><%- f_fund(fund.inc_p) %> %</td>
     </tr>
 <%         total_funds += fund.fund_net;
