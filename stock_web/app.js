@@ -1,11 +1,11 @@
 var express = require('express');
+var util = require('util');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var partials = require('express-partials');
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -57,5 +57,13 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+app.locals.f_fund = function(num, digit) {
+    digit = digit || 2;
+    var str = num.toFixed(digit);
+    return num > 0 ? '<font color="green">' + str + '</font>'
+                   : '<font color="red">' + str + '</font>';
+
+}
 
 module.exports = app;
