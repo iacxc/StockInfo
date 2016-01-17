@@ -27,7 +27,7 @@ exports.get_codes = function(callback) {
 exports.get_funds = function(limit, callback) {
     var querystr = util.format("select code, date, fund_in, fund_out, fund_net" +
                    ", fund_net / value as percent, fund_per" +
-                   ", inc_p / 100 as inc_p" +
+                   ", inc_p as inc_p" +
                    " from funds a "+
                    " where date in" +
                    "    (select date from funds" +

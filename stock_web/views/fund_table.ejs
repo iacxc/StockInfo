@@ -7,17 +7,17 @@
     <col width="90">
     <col width="100">
     <col width="90">
-    <col width="90">
+    <col width="100">
     <col width="90">
     <tr bgcolor="#a0a0a0">
         <th><%= code %></th>
-        <th>Date</th>
-        <th>Fund In</th>
-        <th>Fund Out</th>
-        <th>Fund Net</th>
-        <th>Total %</th>
-        <th>Current %</th>
-        <th>Increase %</th>
+        <th><%= resources.date %></th>
+        <th><%= resources.fund_in %></th>
+        <th><%= resources.fund_out %></th>
+        <th><%= resources.fund_net %></th>
+        <th><%= resources.percent %> %</th>
+        <th><%= resources.fund_per %> %</th>
+        <th><%= resources.inc_p %> %</th>
     </tr>
 <%
        var total_funds = 0
