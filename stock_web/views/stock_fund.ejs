@@ -1,9 +1,0 @@
-
-<% var keys = [];
-   for (var code in funds) { keys.push(code); }
-   keys.sort();
-   keys.forEach( function(code) {
-       fundList = funds[code];
-%>
-<% include fund_table %>
-<% }); %>
