@@ -40,6 +40,7 @@ code_infos = [
 ("600837",  u"海通证券"),
 ("600895",  u"张江高科"),
 ("601166",  u"兴业银行"),
+("601198",  u"东兴证券"),
 ("601318",  u"中国平安")]
 cursor.executemany("insert into code values (?,?)", code_infos)
 
