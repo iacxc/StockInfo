@@ -76,7 +76,7 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
     <td align="right"><b>{percent}</b> %</td>
     <td align="right"><b>{fund_per}</b> %</td>
     <td align="right"><b>{inc_p}</b> %</td>
-</tr>""".format(rowheader="<td rowspan=%d>&nbsp;</td>" % (len(rows)+1)
+</tr>""".format(rowheader="<td rowspan=%d>&nbsp;</td>" % (len(rows))
                                                    if firstrow else "",
                 date=row.date,
                 fund_in=row.fund_in,
@@ -93,7 +93,8 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
 
         #table footer
         tlines.append("""<tr bgcolor="#eeeeee">
-    <td>Total</td>
+    <td></td>
+    <td align="center">Total</td>
     <td></td>
     <td></td>
     <td align="right">{0}</td>
@@ -104,7 +105,7 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
                 f_fund(total_percent, 3)))
 
         h_tables.append("""<br/>
-<table border=0 bgcolor="#404040" cellspacing="1" cellpadding="5">
+<table border=0 cellspacing="1" cellpadding="5">
 <col width="70">
 <col width="100">
 <col width="70">
