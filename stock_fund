@@ -61,6 +61,7 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
 
         total_funds = 0
         total_percent = 0
+        total_increase = 0
 
         rows = [RowType(*row) for row in cursor.fetchall()]
 
@@ -88,6 +89,7 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
                 ))
             total_funds += row.fund_net
             total_percent += row.percent
+            total_increase += row.inc_p
 
             firstrow = False
 
@@ -100,9 +102,10 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
     <td align="right">{0}</td>
     <td align="right"><b>{1}</b> %</td>
     <td></td>
-    <td></td>
+    <td align="right"><b>{2}</b> %</td>
 </tr>""".format(f_fund(total_funds),
-                f_fund(total_percent, 3)))
+                f_fund(total_percent, 3),
+                f_fund(total_increase), ))
 
         h_tables.append("""<br/>
 <table border=0 cellspacing="1" cellpadding="5">
