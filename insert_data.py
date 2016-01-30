@@ -2,10 +2,14 @@
 
 
 from datetime import date
+import sys
 import DBUtils
 import StockUtil
 
-datestr = date.today().strftime('%Y-%m-%d')
+if len(sys.argv) == 1:
+    datestr = date.today().strftime('%Y-%m-%d')
+else:
+    datestr = sys.argv[1]
 
 db = DBUtils.get_db()
 cursor = db.cursor()
