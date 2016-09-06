@@ -1,0 +1,42 @@
+#!/usr/bin/python
+
+import requests
+import random
+import sys
+
+def gen_allcodes(fname):
+    prefix = lambda x: ('sh' if x.startswith('60') else 'sz') + x
+    fcodes = file(fname, 'w')
+
+    try:
+        codelist = []
+        for code in ['600' + '%03d' % idx for idx in range(780, 1000)] + \
+                    ['601' + '%03d' % idx for idx in range(1000)] + \
+                    ['603' + '%03d' % idx for idx in range(1000)] + \
+                    ['000' + '%03d' % idx for idx in range(1000)] + \
+                    ['002' + '%03d' % idx for idx in range(1000)] + \
+                    ['300' + '%03d' % idx for idx in range(1000)]:
+            url = 'http://qt.gtimg.cn/q=ff_' + prefix(code)
+            resp = requests.get(url)
+            resp_text = resp.text.strip()
+            if resp_text.startswith('v_ff'):
+                items = resp_text.split('~')
+                print '%s,%s' % (code, items[12])
+                fcodes.write('%s,%s\n' % (code, items[12].encode('utf-8')))
+                codelist.append(code)
+
+    except KeyboardInterrupt:
+        print
+
+    fcodes.close()
+    return codelist
+
+def pickup_code(fname):
+    codes = file(fname).read().split('\n')
+    return [ codes[random.randint(0, len(codes))] for idx in range(5)]
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1 and sys.argv[1] == '-generate':
+        print gen_allcodes('code.list')
+    else:
+        print '\n'.join(pickup_code('code.list'))
