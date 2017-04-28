@@ -29,7 +29,7 @@ def hello():
 
 @app.route("/stock_fund")
 def stock_fund():
-    limit = request.query.limit or '50'
+    limit = request.query.limit or '30'
     db = DBUtils.get_db()
 
     h_tables = []
@@ -49,14 +49,14 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
 
         #table header
         tlines = ["""<tr bgcolor="#a0a0a0">
-    <th>{0}</th>
-    <th>Date</th>
-    <th>Fund In</th>
-    <th>Fund Out</th>
-    <th>Fund Net</th>
-    <th>Total %</th>
-    <th>Current %</th>
-    <th>Increase %</th>
+    <th nowrap>{0}</th>
+    <th nowrap>Date</th>
+    <th nowrap>Fund In</th>
+    <th nowrap>Fund Out</th>
+    <th nowrap>Fund Net</th>
+    <th nowrap>Total %</th>
+    <th nowrap>Current %</th>
+    <th nowrap>Increase %</th>
 </tr>""".format(code)]
 
         total_funds = 0
@@ -74,8 +74,8 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
     <td align="right">{fund_in:.1f}</td>
     <td align="right">{fund_out:.1f}</td>
     <td align="right">{fund_net}</td>
-    <td align="right"><b>{percent}</b> %</td>
-    <td align="right"><b>{fund_per}</b> %</td>
+    <td align="right" nowrap><b>{percent}</b> %</td>
+    <td align="right" nowrap><b>{fund_per}</b> %</td>
     <td align="right"><b>{inc_p}</b> %</td>
 </tr>""".format(rowheader="<td rowspan=%d>&nbsp;</td>" % (len(rows))
                                                    if firstrow else "",
