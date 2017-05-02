@@ -1,12 +1,11 @@
 #!/usr/bin/python -O
 
 from bottle import Bottle, run, request
-from collections import namedtuple
-import DBUtils
 
-RowType = namedtuple("RowType", ["code", "date", "fund_in", "fund_out",
-                                 "fund_net", "fund_per", "percent", "inc_p"])
+from model import Repository
+
 app = Bottle()
+
 
 def f_fund(fund, digits=2):
     """ decrate the fund, if positive, use green; negative, use red
@@ -30,24 +29,11 @@ def hello():
 @app.route("/stock_fund")
 def stock_fund():
     limit = request.query.limit or '30'
-    db = DBUtils.get_db()
+    repository = Repository()
 
     h_tables = []
-    cursor = db.cursor()
-    for code in DBUtils.get_codes(db):
-
-        querystr = """SELECT *
-FROM
-    (SELECT code, date, fund_in, fund_out, fund_net, fund_per,
-	        fund_net / value as percent, inc_p
-     FROM funds
-     WHERE code = ?
-     ORDER BY date DESC LIMIT {1})
-ORDER BY date""".format(",".join(RowType._fields), limit)
-
-        cursor.execute(querystr, (code,))
-
-        #table header
+    for code in repository.get_codes():
+        # table header
         tlines = ["""<tr bgcolor="#a0a0a0">
     <th nowrap>{0}</th>
     <th nowrap>Date</th>
@@ -63,11 +49,10 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
         total_percent = 0
         total_increase = 0
 
-        rows = [RowType(*row) for row in cursor.fetchall()]
+        rows = repository.get_stockdata(code, limit)
 
-        firstrow = True
+        first_row = True
         for row in rows:
-            row = RowType(*row)
             tlines.append("""<tr bgcolor="#eeeeee">
     {rowheader}
     <td>{date}</td>
@@ -78,7 +63,7 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
     <td align="right" nowrap><b>{fund_per}</b> %</td>
     <td align="right"><b>{inc_p}</b> %</td>
 </tr>""".format(rowheader="<td rowspan=%d>&nbsp;</td>" % (len(rows))
-                                                   if firstrow else "",
+                if first_row else "",
                 date=row.date,
                 fund_in=row.fund_in,
                 fund_out=row.fund_out,
@@ -91,9 +76,9 @@ ORDER BY date""".format(",".join(RowType._fields), limit)
             total_percent += row.percent
             total_increase += row.inc_p
 
-            firstrow = False
+            first_row = False
 
-        #table footer
+        # table footer
         tlines.append("""<tr bgcolor="#eeeeee">
     <td></td>
     <td align="center">Total</td>
