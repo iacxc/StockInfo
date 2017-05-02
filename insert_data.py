@@ -1,37 +1,30 @@
 #!/usr/bin/python -O
 
-
 from datetime import date
 import sys
-import DBUtils
-import StockUtil
+
+from model import Repository
+from model import stock
 
 if len(sys.argv) == 1:
-    datestr = date.today().strftime('%Y-%m-%d')
+    date_str = date.today().strftime('%Y-%m-%d')
 else:
-    datestr = sys.argv[1]
+    date_str = sys.argv[1]
 
-db = DBUtils.get_db()
-cursor = db.cursor()
+repository = Repository()
 
-codelist = list(DBUtils.get_codes(db))
-funds = StockUtil.get_funds(codelist)
-stock_data = StockUtil.get_data(codelist)
+code_list = list(repository.get_codes())
+funds = stock.get_funds(code_list)
+stock_data = stock.get_data(code_list)
 
-for code in codelist:
+for code in code_list:
     if code in funds:
         if __debug__:
             print "Processing" , code, "..."
         fund = funds[code]
 
-        if fund["date"] != datestr:
+        if fund["date"] != date_str:
             continue
 
-        sqlstr = "insert into funds({0}) values (?,?,?,?,?,?,?,?)".format(
-                      "code, date, fund_in, fund_out, fund_net, fund_per, value, inc_p")
-        cursor.execute(sqlstr, (code, datestr, fund["big_in"], fund["big_out"],
-                                         fund["big_net"], fund["big_per"],
-                                         stock_data[code]['circu_value'],
-                                         stock_data[code]['percent']))
+        repository.add_stockdata(code, date_str, fund, stock_data)
 
-    db.commit()
