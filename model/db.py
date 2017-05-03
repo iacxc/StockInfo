@@ -1,5 +1,6 @@
 
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 from collections import namedtuple
 import sqlite3
@@ -23,7 +24,7 @@ name text not null)""")
             ("000615", u"京汉股份"),
             ("000856", u"冀东装备"),
             ("002405", u"四维图新"),
-            ("002457", u"青龙管业：w"),
+            ("002457", u"青龙管业"),
             ("002631", u"德尔未来"),
             ("300024", u"机 器 人"),
             ("300033", u"同 花 顺"),
@@ -48,28 +49,31 @@ name text not null)""")
     primary key (code, date))"""
 
         if cleandb:
-            print "Dropping table"
+            print("Dropping table")
             cursor.execute("DROP TABLE IF EXISTS funds")
 
-        print "Creating table"
+        print("Creating table")
         cursor.execute(sqlstr)
 
         self._db.commit()
 
     def get_codes(self):
         cursor = self._db.cursor()
-        cursor.execute("SELECT code FROM code")
+        cursor.execute("SELECT code,name FROM code")
 
-        return (row[0] for row in cursor.fetchall())
+        return [(row[0], row[1]) for row in cursor.fetchall()]
 
     def add_stockdata(self, code, date_str, fund, stock_data):
         cursor = self._db.cursor()
         sql_str = "insert into funds({0}) values (?,?,?,?,?,?,?,?)".format(
                   "code, date, fund_in, fund_out, fund_net, fund_per, value, inc_p")
+        if __debug__:
+            print(sql_str)
         cursor.execute(sql_str, (code, date_str, fund["big_in"], fund["big_out"],
                                  fund["big_net"], fund["big_per"],
                                  stock_data[code]['circu_value'],
                                  stock_data[code]['percent']))
+        self._db.commit()
 
     def get_stockdata(self, code, limit):
         query_str = """SELECT * FROM

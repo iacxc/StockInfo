@@ -1,5 +1,7 @@
 #!/usr/bin/python -O
 
+from __future__ import print_function
+
 from datetime import date
 import sys
 
@@ -13,14 +15,14 @@ else:
 
 repository = Repository()
 
-code_list = list(repository.get_codes())
+code_list = repository.get_codes()
 funds = stock.get_funds(code_list)
 stock_data = stock.get_data(code_list)
 
 for code in code_list:
     if code in funds:
         if __debug__:
-            print "Processing" , code, "..."
+            print("Processing", code, "...")
         fund = funds[code]
 
         if fund["date"] != date_str:

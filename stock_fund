@@ -1,4 +1,5 @@
 #!/usr/bin/python -O
+# -*- coding: utf-8 -*-
 
 from bottle import Bottle, run, request
 
@@ -32,10 +33,10 @@ def stock_fund():
     repository = Repository()
 
     h_tables = []
-    for code in repository.get_codes():
+    for code,name in repository.get_codes():
         # table header
-        tlines = ["""<tr bgcolor="#a0a0a0">
-    <th nowrap>{0}</th>
+        tlines = [u"""<tr bgcolor="#a0a0a0">
+    <th nowrap>{0} {1}</th>
     <th nowrap>Date</th>
     <th nowrap>Fund In</th>
     <th nowrap>Fund Out</th>
@@ -43,7 +44,7 @@ def stock_fund():
     <th nowrap>Total %</th>
     <th nowrap>Current %</th>
     <th nowrap>Increase %</th>
-</tr>""".format(code)]
+</tr>""".format(code, name)]
 
         total_funds = 0
         total_percent = 0
@@ -53,7 +54,7 @@ def stock_fund():
 
         first_row = True
         for row in rows:
-            tlines.append("""<tr bgcolor="#eeeeee">
+            tlines.append(u"""<tr bgcolor="#eeeeee">
     {rowheader}
     <td>{date}</td>
     <td align="right">{fund_in:.1f}</td>
@@ -92,7 +93,7 @@ def stock_fund():
                 f_fund(total_percent, 3),
                 f_fund(total_increase), ))
 
-        h_tables.append("""<br/>
+        h_tables.append(u"""<br/>
 <table border=0 cellspacing="1" cellpadding="5">
 <col width="70">
 <col width="100">
@@ -106,7 +107,7 @@ def stock_fund():
 </table>
 <br/>""".format(tbody="\n".join(tlines)))
 
-    html = """<html>
+    html = u"""<html>
 <title>Stock Funds</title>
 <style type="text/css">
 body {{
