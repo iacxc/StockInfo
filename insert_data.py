@@ -1,7 +1,10 @@
 #!/usr/bin/python -O
 
+<<<<<<< HEAD
 from __future__ import print_function
 
+=======
+>>>>>>> cecb4acef63c2f52f2f72167d8130349fca0467d
 from datetime import date
 import sys
 
@@ -15,7 +18,11 @@ else:
 
 repository = Repository()
 
+<<<<<<< HEAD
 code_list = repository.get_codes()
+=======
+code_list = list(repository.get_codes())
+>>>>>>> cecb4acef63c2f52f2f72167d8130349fca0467d
 funds = stock.get_funds(code_list)
 stock_data = stock.get_data(code_list)
 
