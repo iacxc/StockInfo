@@ -33,17 +33,10 @@ def stock_fund():
     repository = Repository()
 
     h_tables = []
-<<<<<<< HEAD
     for code,name in repository.get_codes():
         # table header
         tlines = [u"""<tr bgcolor="#a0a0a0">
     <th nowrap>{0} {1}</th>
-=======
-    for code in repository.get_codes():
-        # table header
-        tlines = ["""<tr bgcolor="#a0a0a0">
-    <th nowrap>{0}</th>
->>>>>>> cecb4acef63c2f52f2f72167d8130349fca0467d
     <th nowrap>Date</th>
     <th nowrap>Fund In</th>
     <th nowrap>Fund Out</th>
@@ -61,11 +54,7 @@ def stock_fund():
 
         first_row = True
         for row in rows:
-<<<<<<< HEAD
             tlines.append(u"""<tr bgcolor="#eeeeee">
-=======
-            tlines.append("""<tr bgcolor="#eeeeee">
->>>>>>> cecb4acef63c2f52f2f72167d8130349fca0467d
     {rowheader}
     <td>{date}</td>
     <td align="right">{fund_in:.1f}</td>

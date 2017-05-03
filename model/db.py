@@ -1,9 +1,6 @@
 
 # -*- coding: utf-8 -*-
-<<<<<<< HEAD
 from __future__ import print_function
-=======
->>>>>>> cecb4acef63c2f52f2f72167d8130349fca0467d
 
 from collections import namedtuple
 import sqlite3
@@ -27,11 +24,7 @@ name text not null)""")
             ("000615", u"京汉股份"),
             ("000856", u"冀东装备"),
             ("002405", u"四维图新"),
-<<<<<<< HEAD
             ("002457", u"青龙管业"),
-=======
-            ("002457", u"青龙管业：w"),
->>>>>>> cecb4acef63c2f52f2f72167d8130349fca0467d
             ("002631", u"德尔未来"),
             ("300024", u"机 器 人"),
             ("300033", u"同 花 顺"),
@@ -56,50 +49,31 @@ name text not null)""")
     primary key (code, date))"""
 
         if cleandb:
-<<<<<<< HEAD
             print("Dropping table")
             cursor.execute("DROP TABLE IF EXISTS funds")
 
         print("Creating table")
-=======
-            print "Dropping table"
-            cursor.execute("DROP TABLE IF EXISTS funds")
-
-        print "Creating table"
->>>>>>> cecb4acef63c2f52f2f72167d8130349fca0467d
         cursor.execute(sqlstr)
 
         self._db.commit()
 
     def get_codes(self):
         cursor = self._db.cursor()
-<<<<<<< HEAD
         cursor.execute("SELECT code,name FROM code")
 
         return [(row[0], row[1]) for row in cursor.fetchall()]
-=======
-        cursor.execute("SELECT code FROM code")
-
-        return (row[0] for row in cursor.fetchall())
->>>>>>> cecb4acef63c2f52f2f72167d8130349fca0467d
 
     def add_stockdata(self, code, date_str, fund, stock_data):
         cursor = self._db.cursor()
         sql_str = "insert into funds({0}) values (?,?,?,?,?,?,?,?)".format(
                   "code, date, fund_in, fund_out, fund_net, fund_per, value, inc_p")
-<<<<<<< HEAD
         if __debug__:
             print(sql_str)
-=======
->>>>>>> cecb4acef63c2f52f2f72167d8130349fca0467d
         cursor.execute(sql_str, (code, date_str, fund["big_in"], fund["big_out"],
                                  fund["big_net"], fund["big_per"],
                                  stock_data[code]['circu_value'],
                                  stock_data[code]['percent']))
-<<<<<<< HEAD
         self._db.commit()
-=======
->>>>>>> cecb4acef63c2f52f2f72167d8130349fca0467d
 
     def get_stockdata(self, code, limit):
         query_str = """SELECT * FROM
