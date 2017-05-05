@@ -1,10 +1,13 @@
 
+from __future__ import print_function
+
 import requests
 import re
 from collections import namedtuple
 
 
 def get_history(code, fromdate=None, todate=None):
+    """ get history data from yahoo"""
     url = "http://table.finance.yahoo.com/table.csv?s={0}.{1}".format(
         code, "ss" if code.startswith("60") else "sz")
 
@@ -15,7 +18,8 @@ def get_history(code, fromdate=None, todate=None):
         url += "&d={0}&e={1}&f={2}".format(todate.month-1,
                                            todate.day, todate.year)
 
-    if __debug__: print url
+    if __debug__:
+        print(url)
     resp = requests.get(url)
     RecordType = namedtuple("RecordType", ["date", "open", "high", "low",
                                            "close", "volume", "adj_close"])
@@ -31,10 +35,12 @@ def get_history(code, fromdate=None, todate=None):
 
 
 def get_funds(codelist):
+    """ get the funds in/out of a list of stocks """
     prefix = lambda x: "ff_" + ("sh" if x.startswith("60") else "sz") + x
     url = "http://qt.gtimg.cn/q=" + ",".join(map(prefix, codelist))
 
-    if __debug__: print url
+    if __debug__:
+        print(url)
     resp = requests.get(url)
 
     funds = {}
@@ -43,6 +49,7 @@ def get_funds(codelist):
 
         m = re.search(r"(.+)=\"(.+)\"", line)
         items = m.group(2).split("~")
+
         fund = {"big_in"    : float(items[1]),
                 "big_out"   : float(items[2]),
                 "big_net"   : float(items[3]),
@@ -64,7 +71,8 @@ def get_brief_data(codelist):
     prefix = lambda x: "s_" + ("sh" if x.startswith("60") else "sz") + x
     url = "http://qt.gtimg.cn/q=" + ",".join(map(prefix, codelist))
 
-    if __debug__: print url
+    if __debug__:
+        print(url)
     resp = requests.get(url)
 
     datas = {}
@@ -85,10 +93,12 @@ def get_brief_data(codelist):
 
 
 def get_data(codelist):
+    """ get the detail data of a list of stocks"""
     prefix = lambda x: ("sh" if x.startswith("60") else "sz") + x
     url = "http://qt.gtimg.cn/q=" + ",".join(map(prefix, codelist))
 
-    if __debug__: print url
+    if __debug__:
+        print(url)
     resp = requests.get(url)
 
     datas = {}

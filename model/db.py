@@ -23,6 +23,7 @@ name text not null)""")
         code_infos = [
             ("000615", u"京汉股份"),
             ("000856", u"冀东装备"),
+            ("002158", u"汉钟精机"),
             ("002405", u"四维图新"),
             ("002457", u"青龙管业"),
             ("002631", u"德尔未来"),
@@ -30,9 +31,11 @@ name text not null)""")
             ("300033", u"同 花 顺"),
             ("300059", u"东方财富"),
             ("300131", u"英唐智控"),
+            ("300157", u"恒泰艾普"),
             ("600388", u"龙净环保"),
             ("600692", u"亚通股份"),
             ("600977", u"中国电影"),
+            ("603616", u"韩建河山"),
             ("603885", u"吉祥航空"),
         ]
         cursor.executemany("insert into code values (?,?)", code_infos)
@@ -55,13 +58,16 @@ name text not null)""")
         print("Creating table")
         cursor.execute(sqlstr)
 
+        self.commit()
+
+    def commit(self):
         self._db.commit()
 
     def get_codes(self):
         cursor = self._db.cursor()
         cursor.execute("SELECT code,name FROM code")
 
-        return [(row[0], row[1]) for row in cursor.fetchall()]
+        return cursor.fetchall()
 
     def add_stockdata(self, code, date_str, fund, stock_data):
         cursor = self._db.cursor()
@@ -69,11 +75,14 @@ name text not null)""")
                   "code, date, fund_in, fund_out, fund_net, fund_per, value, inc_p")
         if __debug__:
             print(sql_str)
-        cursor.execute(sql_str, (code, date_str, fund["big_in"], fund["big_out"],
-                                 fund["big_net"], fund["big_per"],
-                                 stock_data[code]['circu_value'],
-                                 stock_data[code]['percent']))
-        self._db.commit()
+
+        try:
+            cursor.execute(sql_str, (code, date_str, fund["big_in"], fund["big_out"],
+                                     fund["big_net"], fund["big_per"],
+                                     stock_data[code]['circu_value'],
+                                     stock_data[code]['percent']))
+        except sqlite3.IntegrityError:
+            pass
 
     def get_stockdata(self, code, limit):
         query_str = """SELECT * FROM

@@ -1,12 +1,12 @@
-#!/usr/bin/python -O
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from bottle import Bottle, run, request
+from flask import Flask, request
 
 from model import Repository
 
-app = Bottle()
 
+app = Flask(__name__)
 
 def f_fund(fund, digits=2):
     """ decrate the fund, if positive, use green; negative, use red
@@ -15,35 +15,33 @@ def f_fund(fund, digits=2):
         return ""
 
     if fund > 0:
-        return "<font color=green>{0:.{1}f}</font>".format(fund, digits)
+        return "<font color=green>{0:,.{1}f}</font>".format(fund, digits)
     elif fund < 0:
-        return "<font color=red>{0:.{1}f}</font>".format(fund, digits)
+        return "<font color=red>{0:,.{1}f}</font>".format(fund, digits)
     else:
-        return "{0:.{1}f}".format(fund, digits)
-
+        return "{0:,.{1}f}".format(fund, digits)
 
 @app.route("/")
-def hello():
-    return "Hello"
-
+def index():
+    return "Hello, World!"
 
 @app.route("/stock_fund")
 def stock_fund():
-    limit = request.query.limit or '30'
+    limit = request.args.get('limit', '30')
     repository = Repository()
 
-    h_tables = []
+    tbody = []
     for code,name in repository.get_codes():
         # table header
         tlines = [u"""<tr bgcolor="#a0a0a0">
     <th nowrap>{0} {1}</th>
-    <th nowrap>Date</th>
-    <th nowrap>Fund In</th>
-    <th nowrap>Fund Out</th>
-    <th nowrap>Fund Net</th>
-    <th nowrap>Total %</th>
-    <th nowrap>Current %</th>
-    <th nowrap>Increase %</th>
+    <th nowrap>日期</th>
+    <th nowrap>流入（万）</th>
+    <th nowrap>流出（万）</th>
+    <th nowrap>净流入（万）</th>
+    <th nowrap>净流入/流通 %</th>
+    <th nowrap>净流入/当日 %</th>
+    <th nowrap>涨跌 %</th>
 </tr>""".format(code, name)]
 
         total_funds = 0
@@ -80,9 +78,9 @@ def stock_fund():
             first_row = False
 
         # table footer
-        tlines.append("""<tr bgcolor="#eeeeee">
+        tlines.append(u"""<tr bgcolor="#eeeeee">
     <td></td>
-    <td align="center">Total</td>
+    <td align="center">合计</td>
     <td></td>
     <td></td>
     <td align="right">{0}</td>
@@ -93,19 +91,7 @@ def stock_fund():
                 f_fund(total_percent, 3),
                 f_fund(total_increase), ))
 
-        h_tables.append(u"""<br/>
-<table border=0 cellspacing="1" cellpadding="5">
-<col width="70">
-<col width="100">
-<col width="70">
-<col width="80">
-<col width="80">
-<col width="70">
-<col width="80">
-<col width="90">
-{tbody}
-</table>
-<br/>""".format(tbody="\n".join(tlines)))
+        tbody.extend(tlines)
 
     html = u"""<html>
 <title>Stock Funds</title>
@@ -115,12 +101,22 @@ body {{
 }}
 </style>
 <body>
+<table border=0 cellspacing="1" cellpadding="5">
+<col width="70">
+<col width="100">
+<col width="70">
+<col width="80">
+<col width="80">
+<col width="70">
+<col width="80">
+<col width="90">
 {0}
+</table>
 </body>
 </html>
-""".format("\n".join(h_tables))
+""".format("\n".join(tbody))
 
     return html
 
 
-run(app, host="localhost", port=8088, debug=True)
+app.run(debug=True)

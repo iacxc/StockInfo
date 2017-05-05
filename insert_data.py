@@ -15,7 +15,7 @@ else:
 
 repository = Repository()
 
-code_list = list(repository.get_codes())
+code_list = [row[0] for row in repository.get_codes()]
 funds = stock.get_funds(code_list)
 stock_data = stock.get_data(code_list)
 
@@ -29,4 +29,7 @@ for code in code_list:
             continue
 
         repository.add_stockdata(code, date_str, fund, stock_data)
+
+repository.commit()
+
 
