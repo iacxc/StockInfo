@@ -1,12 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request
-
+from flask import Flask, request, url_for, render_template
 from model import Repository
+from model import stock
 
 
 app = Flask(__name__)
+
 
 def f_fund(fund, digits=2):
     """ decrate the fund, if positive, use green; negative, use red
@@ -21,20 +22,26 @@ def f_fund(fund, digits=2):
     else:
         return "{0:,.{1}f}".format(fund, digits)
 
+
 @app.route("/")
 def index():
-    return "Hello, World!"
+    return render_template("hello.html", name="world")
+
 
 @app.route("/stock_fund")
 def stock_fund():
     limit = request.args.get('limit', '30')
     repository = Repository()
 
+    funds = {}
+    for code, name in repository.get_codes():
+        funds[code + " " + name] = repository.get_stockdata(code, limit)
+
     tbody = []
-    for code,name in repository.get_codes():
+    for code, name in repository.get_codes():
         # table header
-        tlines = [u"""<tr bgcolor="#a0a0a0">
-    <th nowrap>{0} {1}</th>
+        tbody.append(u"""<tr>
+    <th nowrap><a href="{url}">{code}</a> {name}</th>
     <th nowrap>日期</th>
     <th nowrap>流入（万）</th>
     <th nowrap>流出（万）</th>
@@ -42,7 +49,7 @@ def stock_fund():
     <th nowrap>净流入/流通 %</th>
     <th nowrap>净流入/当日 %</th>
     <th nowrap>涨跌 %</th>
-</tr>""".format(code, name)]
+</tr>""".format(code=code, url=stock.get_url(code), name=name))
 
         total_funds = 0
         total_percent = 0
@@ -52,21 +59,20 @@ def stock_fund():
 
         first_row = True
         for row in rows:
-            tlines.append(u"""<tr bgcolor="#eeeeee">
+            tbody.append(u"""<tr>
     {rowheader}
     <td>{date}</td>
-    <td align="right">{fund_in:.1f}</td>
-    <td align="right">{fund_out:.1f}</td>
+    <td align="right">{fund_in:,.0f}</td>
+    <td align="right">{fund_out:,.0f}</td>
     <td align="right">{fund_net}</td>
     <td align="right" nowrap><b>{percent}</b> %</td>
     <td align="right" nowrap><b>{fund_per}</b> %</td>
     <td align="right"><b>{inc_p}</b> %</td>
-</tr>""".format(rowheader="<td rowspan=%d>&nbsp;</td>" % (len(rows))
-                if first_row else "",
+</tr>""".format(rowheader="<td rowspan={0}>&nbsp;</td>".format(len(rows)) if first_row else "",
                 date=row.date,
                 fund_in=row.fund_in,
                 fund_out=row.fund_out,
-                fund_net=f_fund(row.fund_net),
+                fund_net=f_fund(row.fund_net, 0),
                 percent=f_fund(row.percent, 3),
                 fund_per=f_fund(row.fund_per),
                 inc_p=f_fund(row.inc_p),
@@ -78,7 +84,7 @@ def stock_fund():
             first_row = False
 
         # table footer
-        tlines.append(u"""<tr bgcolor="#eeeeee">
+        tbody.append(u"""<tr>
     <td></td>
     <td align="center">合计</td>
     <td></td>
@@ -91,15 +97,11 @@ def stock_fund():
                 f_fund(total_percent, 3),
                 f_fund(total_increase), ))
 
-        tbody.extend(tlines)
-
     html = u"""<html>
-<title>Stock Funds</title>
-<style type="text/css">
-body {{
-    font-family: Aria, Helvetica;
-}}
-</style>
+    <head>
+        <title>Stock Funds</title>
+        <link rel="stylesheet" href="{stylesheet}"/>
+    </head>
 <body>
 <table border=0 cellspacing="1" cellpadding="5">
 <col width="70">
@@ -110,13 +112,13 @@ body {{
 <col width="70">
 <col width="80">
 <col width="90">
-{0}
+{tbody}
 </table>
 </body>
 </html>
-""".format("\n".join(tbody))
+""".format(stylesheet=url_for("static", filename="style.css"),
+           tbody="\n".join(tbody))
 
     return html
-
 
 app.run(debug=True)

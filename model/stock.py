@@ -127,3 +127,11 @@ def get_data(codelist):
         datas[code] = data
 
     return datas
+
+
+def get_url(code):
+    prefix = lambda x: ("sh" if x.startswith("60") else "sz") + x
+
+    return "http://finance.sina.com.cn/realstock/company/{0}/nc.shtml".format(
+        prefix(code)
+    )
