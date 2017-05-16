@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python -O
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request, url_for, render_template
@@ -40,7 +40,7 @@ def stock_fund():
     tbody = []
     for code, name in repository.get_codes():
         # table header
-        tbody.append(u"""<tr>
+        tbody.append("""<tr>
     <th nowrap><a href="{url}">{code}</a> {name}</th>
     <th nowrap>日期</th>
     <th nowrap>流入（万）</th>
@@ -59,7 +59,7 @@ def stock_fund():
 
         first_row = True
         for row in rows:
-            tbody.append(u"""<tr>
+            tbody.append("""<tr>
     {rowheader}
     <td>{date}</td>
     <td align="right">{fund_in:,.0f}</td>
@@ -84,7 +84,7 @@ def stock_fund():
             first_row = False
 
         # table footer
-        tbody.append(u"""<tr>
+        tbody.append("""<tr>
     <td></td>
     <td align="center">合计</td>
     <td></td>
@@ -93,11 +93,11 @@ def stock_fund():
     <td align="right"><b>{1}</b> %</td>
     <td></td>
     <td align="right"><b>{2}</b> %</td>
-</tr>""".format(f_fund(total_funds),
+</tr>""".format(f_fund(total_funds, 0),
                 f_fund(total_percent, 3),
                 f_fund(total_increase), ))
 
-    html = u"""<html>
+    html = """<html>
     <head>
         <title>Stock Funds</title>
         <link rel="stylesheet" href="{stylesheet}"/>

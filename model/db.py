@@ -105,34 +105,18 @@ t_funds = Table("funds",
 class Repository(object):
     def __init__(self, db_file=DBFILE):
         self._db = sqlite3.connect(db_file)
+        self._db.text_factory = str
 
     def init(self, clean_db=False):
+
+        with file("static/codeinfo.txt") as f:
+            code_infos = [line.strip().split(",")
+                          for line in f.read().split('\n') if line]
 
         cursor = self._db.cursor()
         print("Creating table code")
         cursor.execute(t_code.drop())
         cursor.execute(t_code.create())
-        code_infos = [
-            ("000615", u"京汉股份"),
-            ("000651", u"格力电器"),
-            ("000856", u"冀东装备"),
-            ("002158", u"汉钟精机"),
-            ("002405", u"四维图新"),
-            ("002457", u"青龙管业"),
-            ("002631", u"德尔未来"),
-            ("300024", u"机 器 人"),
-            ("300033", u"同 花 顺"),
-            ("300059", u"东方财富"),
-            ("300131", u"英唐智控"),
-            ("300157", u"恒泰艾普"),
-            ("600388", u"龙净环保"),
-            ("600692", u"亚通股份"),
-            ("600977", u"中国电影"),
-            ("603288", u"海天味业"),
-            ("603616", u"韩建河山"),
-            ("603885", u"吉祥航空"),
-            ("603886", u"元祖股份"),
-        ]
         cursor.executemany(t_code.insert(["code", "name"]), code_infos)
 
         if clean_db:
