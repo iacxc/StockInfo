@@ -30,6 +30,5 @@ for code in code_list:
 
         repository.add_stockdata(code, date_str, fund, stock_data)
 
-repository.commit()
 
 

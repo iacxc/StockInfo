@@ -1,2 +1,2 @@
 
-from db import Repository, RowType
+from db3 import Repository
