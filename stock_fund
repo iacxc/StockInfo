@@ -48,11 +48,13 @@ def stock_fund():
     <th nowrap>净流入（万）</th>
     <th nowrap>净流入/流通 %</th>
     <th nowrap>净流入/当日 %</th>
+    <th nowrap>换手 %</th>
     <th nowrap>涨跌 %</th>
 </tr>""".format(code=code, url=stock.get_url(code), name=name))
 
         total_funds = 0
         total_percent = 0
+        total_exchange = 0
         total_increase = 0
 
         rows = repository.get_stockdata(code, limit)
@@ -67,6 +69,7 @@ def stock_fund():
     <td align="right">{fund_net}</td>
     <td align="right" nowrap><b>{percent}</b> %</td>
     <td align="right" nowrap><b>{fund_per}</b> %</td>
+    <td align="right" nowrap>{exchange} %</td>
     <td align="right"><b>{inc_p}</b> %</td>
 </tr>""".format(rowheader="<td rowspan={0}>&nbsp;</td>".format(len(rows)) if first_row else "",
                 date=row.date,
@@ -75,10 +78,12 @@ def stock_fund():
                 fund_net=f_fund(row.fund_net, 0),
                 percent=f_fund(row.percent, 3),
                 fund_per=f_fund(row.fund_per),
+                exchange=row.exchange,
                 inc_p=f_fund(row.inc_p),
                 ))
             total_funds += row.fund_net
             total_percent += row.percent
+            total_exchange += row.exchange
             total_increase += row.inc_p
 
             first_row = False
@@ -93,8 +98,10 @@ def stock_fund():
     <td align="right"><b>{1}</b> %</td>
     <td></td>
     <td align="right"><b>{2}</b> %</td>
+    <td align="right"><b>{3}</b> %</td>
 </tr>""".format(f_fund(total_funds, 0),
                 f_fund(total_percent, 3),
+                total_exchange,
                 f_fund(total_increase), ))
 
     html = u"""<html>
@@ -110,6 +117,7 @@ def stock_fund():
 <col width="80">
 <col width="80">
 <col width="70">
+<col width="80">
 <col width="80">
 <col width="90">
 {tbody}

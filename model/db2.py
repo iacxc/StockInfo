@@ -14,8 +14,8 @@ from sqlalchemy.sql import text
 
 
 DBPATH = "stock_fund.db"
-RowType = namedtuple("RowType", ["code", "date", "fund_in", "fund_out",
-                                 "fund_net", "fund_per", "percent", "inc_p"])
+RowType = namedtuple("RowType", ["code", "date", "fund_in", "fund_out", "fund_net", 
+                                 "fund_per", "percent", "exchange", "inc_p"])
 
 
 class Repository(object):
@@ -24,12 +24,11 @@ class Repository(object):
         self.engine = create_engine("sqlite:///{0}".format(db_path),
                                     convert_unicode=True,
                                     echo=True)
-        self.engine.raw_connection().connection.text_factory = str
 
         self.meta = MetaData(self.engine)
 
         self.t_code = Table("code", self.meta,
-                            Column("code", String, nullable=False,primary_key=True),
+                            Column("code", String, nullable=False, primary_key=True),
                             Column("name", UnicodeText, nullable=False))
 
         self.t_funds = Table("funds", self.meta,
@@ -40,6 +39,7 @@ class Repository(object):
                              Column("fund_net", Float),
                              Column("fund_per", Float),
                              Column("value", Float, default=1.0),
+                             Column("exchange", Float),
                              Column("inc_p", Float))
 
     def init(self, clean_db=False):
@@ -76,6 +76,7 @@ class Repository(object):
                              "fund_net": fund["big_net"],
                              "fund_per": fund["big_per"],
                              "value": stock_data[code]["circu_value"],
+                             "exchange": stock_data[code]["exchange"],
                              "inc_p": stock_data[code]["percent"]})
         except sqlalchemy.exc.IntegrityError:
             update_ = self.t_funds.update().\
@@ -86,6 +87,7 @@ class Repository(object):
                  "fund_net": fund["big_net"],
                  "fund_per": fund["big_per"],
                  "value": stock_data[code]["circu_value"],
+                 "exchange": stock_data[code]["exchange"],
                  "inc_p": stock_data[code]["percent"]})
             update_.execute()
 
@@ -93,7 +95,7 @@ class Repository(object):
         """ get stockdata """
         query_str = text("""SELECT * FROM
     (SELECT code, date, fund_in, fund_out, fund_net, fund_per,
-            fund_net / value as percent, inc_p
+            fund_net / value as percent, exchange, inc_p
      FROM funds
      WHERE code = :code
      ORDER BY date DESC LIMIT {0})

@@ -8,6 +8,7 @@ from __future__ import print_function
 from sqlalchemy import create_engine, Column, Float, String, UnicodeText
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import sqlalchemy.orm.exc
 
 
 DBPATH = "stock_fund.db"
@@ -42,6 +43,7 @@ class Funds(Base):
     fund_per = Column("fund_per", Float)
     value = Column("value", Float, default=1.0)
     inc_p = Column("inc_p", Float)
+    exchange = Column("exchange", Float)
 
     @property
     def percent(self):
@@ -83,15 +85,7 @@ class Repository(object):
     def add_stockdata(self, code, date_str, fund, stock_data):
         """ get_codes """
         try:
-            self.session.add(Funds(code=code,
-                                   date=date_str,
-                                   fund_in=fund["big_in"],
-                                   fund_out=fund["big_out"],
-                                   fund_net=fund["big_net"],
-                                   fund_per=fund["big_per"],
-                                   value=stock_data[code]["circu_value"],
-                                   inc_p=stock_data[code]["percent"]))
-        except sqlalchemy.exc.IntegrityError:
+            self.session.query(Funds).filter_by(code=code, date=date_str).one()
             self.session.query(Funds)\
                 .filter(Funds.code == code, Funds.date == date_str)\
                 .update({"fund_in": fund["big_in"],
@@ -99,8 +93,19 @@ class Repository(object):
                          "fund_net": fund["big_net"],
                          "fund_per": fund["big_per"],
                          "value": stock_data[code]["circu_value"],
-                         "inc_p": stock_data[code]["percent"]})
-
+                         "inc_p": stock_data[code]["percent"],
+                         "exchange": stock_data[code]["exchange"]})
+        except sqlalchemy.orm.exc.NoResultFound:
+            self.session.add(Funds(code=code,
+                                   date=date_str,
+                                   fund_in=fund["big_in"],
+                                   fund_out=fund["big_out"],
+                                   fund_net=fund["big_net"],
+                                   fund_per=fund["big_per"],
+                                   value=stock_data[code]["circu_value"],
+                                   inc_p=stock_data[code]["percent"],
+                                   exchange=stock_data[code]["exchange"]))
+ 
         self.session.commit()
 
     def get_stockdata(self, code, limit):
