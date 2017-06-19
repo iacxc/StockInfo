@@ -1,38 +1,36 @@
-# -*- coding:utf8 -*-
-from __future__ import print_function
 
-import requests
-import re
 from collections import namedtuple
+import re
+import requests
 
 
-def get_history(code, fromdate=None, todate=None):
-    """ get history data from yahoo"""
-    url = "http://table.finance.yahoo.com/table.csv?s={0}.{1}".format(
-        code, "ss" if code.startswith("60") else "sz")
+def get_history(code, startdate=None, enddate=None):
+    """ get history data """
+    url = "http://q.stock.sohu.com/hisHq.csv?code=cn_{0}".format(code)
 
-    if fromdate is not None:
-        url += "&a={0}&b={1}&c={2}".format(fromdate.month-1,
-                                           fromdate.day, fromdate.year)
-    if todate is not None:
-        url += "&d={0}&e={1}&f={2}".format(todate.month-1,
-                                           todate.day, todate.year)
+    if enddate is None:
+        import time
+        enddate = time.strftime('%Y%m%d', time.localtime())
+
+    if startdate is not None:
+        url += "&start=" + startdate
+
+    url += "&end=" + enddate
 
     if __debug__:
         print(url)
+
     resp = requests.get(url)
-    RecordType = namedtuple("RecordType", ["date", "open", "high", "low",
-                                           "close", "volume", "adj_close"])
+    RecordType = namedtuple("RecordType", ["date", "open", "close", 
+                                           "inc", "inc_p", "low", "high", 
+                                           "volume", "value", "exchange"])
 
-    datas = []
     if resp.status_code == 200:
-        for line in resp.text.split("\n")[1:]:
-            if line.strip() == "":
-                continue
+        result = resp.json()[0]
+        if result["status"] == 0:
+            return reversed([RecordType(*item) for item in result["hq"]])
 
-            datas.append(RecordType(*line.split(",")))
-
-    return reversed(datas)
+    return []
 
 
 def get_funds(codelist):
@@ -142,3 +140,7 @@ def get_url(code):
     return "http://finance.sina.com.cn/realstock/company/{0}/nc.shtml".format(
         prefix(code)
     )
+
+
+if __name__ == '__main__':
+    print(list(get_history("600692", "20170101")))

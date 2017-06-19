@@ -1,9 +1,8 @@
-# -*- coding:utf8 -*-
+
 """
    db repository using SQLAlchemy ORM
 """
 
-from __future__ import print_function
 
 from sqlalchemy import create_engine, Column, Float, String, UnicodeText
 from sqlalchemy.ext.declarative import declarative_base
@@ -13,10 +12,6 @@ import sqlalchemy.orm.exc
 
 DBPATH = "stock_fund.db"
 
-
-def utf8(astr):
-    """ convert to utf8 """
-    return unicode(astr, "utf-8")
 
 Base = declarative_base()
 
@@ -71,10 +66,10 @@ class Repository(object):
         print("Creating tables")
         Base.metadata.create_all(bind=self.engine)
 
-        with file("static/codeinfo.txt") as f:
+        with open("static/codeinfo.txt") as f:
             for line in f:
                 code, name = line.strip().split(",")
-                self.session.add(Code(code=code, name=utf8(name)))
+                self.session.add(Code(code=code, name=name))
 
         self.session.commit()
 

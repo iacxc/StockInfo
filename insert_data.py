@@ -1,6 +1,5 @@
-#!/usr/bin/python -O
+#!/usr/bin/python3 -O
 
-from __future__ import print_function
 
 from datetime import date
 import sys
@@ -22,13 +21,11 @@ stock_data = stock.get_data(code_list)
 for code in code_list:
     if code in funds:
         if __debug__:
-            print("Processing", code, "...")
+            print("Processing {0} ...".format(code))
         fund = funds[code]
 
-        if fund["date"] != date_str:
-            continue
-
-        repository.add_stockdata(code, date_str, fund, stock_data)
+        if fund["date"] == date_str:
+            repository.add_stockdata(code, date_str, fund, stock_data)
 
 
 

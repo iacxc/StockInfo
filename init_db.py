@@ -1,5 +1,4 @@
-#!/usr/bin/python -O
-# -*- coding: utf-8 -*-
+#!/usr/bin/python3 -O
 
 import sys
 
@@ -14,4 +13,4 @@ else:
 repository = Repository()
 repository.init(cleandb)
 
-print "Initialization completed"
+print("Initialization completed")

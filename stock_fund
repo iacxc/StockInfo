@@ -4,10 +4,8 @@
    web server
 """
 
-from flask import Flask, request, url_for, render_template
-from model import Repository
-from model import stock
-
+from flask import Flask, render_template, request, url_for
+from model import Repository, stock
 
 app = Flask(__name__)
 
@@ -24,6 +22,64 @@ def f_fund(fund, digits=2):
         return "<font color=red>{0:,.{1}f}</font>".format(fund, digits)
     else:
         return "{0:,.{1}f}".format(fund, digits)
+
+
+def table_header(code, name):
+    """ generate the table for code, name """
+    return """<tr>
+    <th nowrap><a href="{url}">{code}</a>
+               <button id=\"btn_{code}\" type=\"button\">{name}</button></th>
+    <th nowrap>日期</th>
+    <th nowrap>流入（万）</th>
+    <th nowrap>流出（万）</th>
+    <th nowrap>净流入（万）</th>
+    <th nowrap>净流入/流通 %</th>
+    <th nowrap>净流入/当日 %</th>
+    <th nowrap>换手 %</th>
+    <th nowrap>涨跌 %</th>
+</tr>""".format(code=code, url=stock.get_url(code), name=name)
+
+
+def table_row(row, first_row, line_count):
+    """ generate one table row """
+    return """<tr>
+    {rowheader}
+    <td>{date}</td>
+    <td align="right">{fund_in:,.0f}</td>
+    <td align="right">{fund_out:,.0f}</td>
+    <td align="right">{fund_net}</td>
+    <td align="right" nowrap><b>{percent}</b> %</td>
+    <td align="right" nowrap><b>{fund_per}</b> %</td>
+    <td align="right" nowrap>{exchange} %</td>
+    <td align="right"><b>{inc_p}</b> %</td>
+</tr>""".format(
+    rowheader="<td rowspan={0}>&nbsp;</td>".format(line_count) if first_row else "",
+    date=row.date,
+    fund_in=row.fund_in,
+    fund_out=row.fund_out,
+    fund_net=f_fund(row.fund_net, 0),
+    percent=f_fund(row.percent, 3),
+    fund_per=f_fund(row.fund_per),
+    exchange=row.exchange,
+    inc_p=f_fund(row.inc_p))
+
+
+def table_footer(total_funds, total_percent, total_exchange, total_increase):
+    """ generate table footer """
+    return """<tr>
+    <td></td>
+    <td align="center">合计</td>
+    <td></td>
+    <td></td>
+    <td align="right">{0}</td>
+    <td align="right"><b>{1}</b> %</td>
+    <td></td>
+    <td align="right" nowrap><b>{2:.3f}</b> %</td>
+    <td align="right"><b>{3}</b> %</td>
+</tr>""".format(f_fund(total_funds, 0),
+                f_fund(total_percent, 3),
+                total_exchange,
+                f_fund(total_increase))
 
 
 @app.route("/")
@@ -43,19 +99,10 @@ def stock_fund():
         funds[code + " " + name] = repository.get_stockdata(code, limit)
 
     tbody = []
+    scripts = []
     for code, name in repository.get_codes():
         # table header
-        tbody.append("""<tr>
-    <th nowrap><a href="{url}">{code}</a> {name}</th>
-    <th nowrap>日期</th>
-    <th nowrap>流入（万）</th>
-    <th nowrap>流出（万）</th>
-    <th nowrap>净流入（万）</th>
-    <th nowrap>净流入/流通 %</th>
-    <th nowrap>净流入/当日 %</th>
-    <th nowrap>换手 %</th>
-    <th nowrap>涨跌 %</th>
-</tr>""".format(code=code, url=stock.get_url(code), name=name))
+        tbody.append(table_header(code, name))
 
         total_funds = 0
         total_percent = 0
@@ -64,28 +111,11 @@ def stock_fund():
 
         rows = repository.get_stockdata(code, limit)
 
+        tbody.append("<tbody id=\"fund_{0}\">".format(code))
         first_row = True
         for row in rows:
-            tbody.append("""<tr>
-    {rowheader}
-    <td>{date}</td>
-    <td align="right">{fund_in:,.0f}</td>
-    <td align="right">{fund_out:,.0f}</td>
-    <td align="right">{fund_net}</td>
-    <td align="right" nowrap><b>{percent}</b> %</td>
-    <td align="right" nowrap><b>{fund_per}</b> %</td>
-    <td align="right" nowrap>{exchange} %</td>
-    <td align="right"><b>{inc_p}</b> %</td>
-</tr>""".format(rowheader="<td rowspan={0}>&nbsp;</td>".format(len(rows)) if first_row else "",
-                date=row.date,
-                fund_in=row.fund_in,
-                fund_out=row.fund_out,
-                fund_net=f_fund(row.fund_net, 0),
-                percent=f_fund(row.percent, 3),
-                fund_per=f_fund(row.fund_per),
-                exchange=row.exchange,
-                inc_p=f_fund(row.inc_p),
-                ))
+            tbody.append(table_row(row, first_row, len(rows)))
+
             total_funds += row.fund_net
             total_percent += row.percent
             total_exchange += row.exchange
@@ -93,26 +123,30 @@ def stock_fund():
 
             first_row = False
 
+        tbody.append("</tbody>")
+
         # table footer
-        tbody.append("""<tr>
-    <td></td>
-    <td align="center">合计</td>
-    <td></td>
-    <td></td>
-    <td align="right">{0}</td>
-    <td align="right"><b>{1}</b> %</td>
-    <td></td>
-    <td align="right"><b>{2:.3f}</b> %</td>
-    <td align="right"><b>{3}</b> %</td>
-</tr>""".format(f_fund(total_funds, 0),
-                f_fund(total_percent, 3),
-                total_exchange,
-                f_fund(total_increase), ))
+        tbody.append(
+            table_footer(
+                total_funds, total_percent, total_exchange, total_increase))
+
+        scripts.append("""$(\"#fund_{code}\").toggle();
+$(\"#btn_{code}\").click(function() {{
+    $(\"#fund_{code}\").toggle();
+}});""".format(code=code))
 
     html = """<html>
     <head>
         <title>Stock Funds</title>
         <link rel="stylesheet" href="{stylesheet}"/>
+        <script type="text/javascript" 
+                src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.js">
+        </script>
+        <script type="text/javascript">
+        $(document).ready(function() {{
+{scripts}
+        }});
+        </script>
     </head>
 <body>
 <table border=0 cellspacing="1" cellpadding="5">
@@ -130,6 +164,7 @@ def stock_fund():
 </body>
 </html>
 """.format(stylesheet=url_for("static", filename="style.css"),
+           scripts="\n".join(scripts),
            tbody="\n".join(tbody))
 
     return html

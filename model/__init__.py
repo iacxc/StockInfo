@@ -1,2 +1,2 @@
 
-from db3 import Repository
+from .db3 import Repository
