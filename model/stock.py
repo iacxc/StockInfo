@@ -27,7 +27,8 @@ def get_history(code, fromdate=None, todate=None):
     datas = []
     if resp.status_code == 200:
         for line in resp.text.split("\n")[1:]:
-            if line.strip() == "": continue
+            if line.strip() == "":
+                continue
 
             datas.append(RecordType(*line.split(",")))
 
@@ -45,7 +46,7 @@ def get_funds(codelist):
 
     funds = {}
     for line in resp.text.split("\n"):
-        if line.strip():
+        if line.strip() == "":
             continue
 
         match = re.search(r"(.+)=\"(.+)\"", line)
@@ -79,7 +80,7 @@ def get_brief_data(codelist):
 
     datas = {}
     for code, line in zip(codelist, resp.text.split("\n")):
-        if line.strip():
+        if line.strip() == "":
             continue
 
         match = re.search(r"(.+)=\"(.+)\"", line)
@@ -106,7 +107,7 @@ def get_data(codelist):
 
     datas = {}
     for code, line in zip(codelist, resp.text.split("\n")):
-        if line.strip():
+        if line.strip() == "":
             continue
 
         match = re.search(r"(.+)=\"(.+)\"", line)
