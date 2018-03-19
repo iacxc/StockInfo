@@ -66,7 +66,7 @@ class Repository(object):
         print("Creating tables")
         Base.metadata.create_all(bind=self.engine)
 
-        with open("static/codeinfo.txt") as f:
+        with open("static/codeinfo.txt", encoding="utf-8") as f:
             for line in f:
                 code, name = line.strip().split(",")
                 self.session.add(Code(code=code, name=name))
